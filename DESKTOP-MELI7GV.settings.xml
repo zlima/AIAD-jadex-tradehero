@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8"?>
+<p0:properties xmlns:p0="http://www.activecomponents.org/jadex-conf" __ID="0">
+	<p0:properties __ID="1" type="awa@DESKTOP-MELI7GV_642">
+		<p0:property __ID="2" type="fast">false</p0:property>
+		<p0:property __ID="3" type="autocreate">true</p0:property>
+		<p0:property __ID="4" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="5" type="awa@DESKTOP-MELI7GV_70f">
+		<p0:property __ID="6" type="fast">false</p0:property>
+		<p0:property __ID="7" type="autocreate">true</p0:property>
+		<p0:property __ID="8" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="9" type="awa@DESKTOP-MELI7GV_669">
+		<p0:property __ID="10" type="fast">false</p0:property>
+		<p0:property __ID="11" type="autocreate">true</p0:property>
+		<p0:property __ID="12" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="13" type="awa@DESKTOP-MELI7GV_cf1">
+		<p0:property __ID="14" type="fast">false</p0:property>
+		<p0:property __ID="15" type="autocreate">true</p0:property>
+		<p0:property __ID="16" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="17" type="awa@DESKTOP-MELI7GV_96d">
+		<p0:property __ID="18" type="fast">false</p0:property>
+		<p0:property __ID="19" type="autocreate">true</p0:property>
+		<p0:property __ID="20" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="21" type="awa@DESKTOP-MELI7GV_bcf">
+		<p0:property __ID="22" type="fast">false</p0:property>
+		<p0:property __ID="23" type="autocreate">true</p0:property>
+		<p0:property __ID="24" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="25" type="awa@DESKTOP-MELI7GV_e02">
+		<p0:property __ID="26" type="fast">false</p0:property>
+		<p0:property __ID="27" type="autocreate">true</p0:property>
+		<p0:property __ID="28" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="29" type="awa@DESKTOP-MELI7GV_b6a">
+		<p0:property __ID="30" type="fast">false</p0:property>
+		<p0:property __ID="31" type="autocreate">true</p0:property>
+		<p0:property __ID="32" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="33" type="awa@DESKTOP-MELI7GV_8cd">
+		<p0:property __ID="34" type="fast">false</p0:property>
+		<p0:property __ID="35" type="autocreate">true</p0:property>
+		<p0:property __ID="36" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="37" type="awa@DESKTOP-MELI7GV_94a">
+		<p0:property __ID="38" type="fast">false</p0:property>
+		<p0:property __ID="39" type="autocreate">true</p0:property>
+		<p0:property __ID="40" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="41" type="awa@DESKTOP-MELI7GV_351">
+		<p0:property __ID="42" type="fast">false</p0:property>
+		<p0:property __ID="43" type="autocreate">true</p0:property>
+		<p0:property __ID="44" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="45" type="awa@DESKTOP-MELI7GV_779">
+		<p0:property __ID="46" type="fast">false</p0:property>
+		<p0:property __ID="47" type="autocreate">true</p0:property>
+		<p0:property __ID="48" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="49" type="awa@DESKTOP-MELI7GV_17e">
+		<p0:property __ID="50" type="fast">false</p0:property>
+		<p0:property __ID="51" type="autocreate">true</p0:property>
+		<p0:property __ID="52" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="53" type="awa@DESKTOP-MELI7GV_3bd">
+		<p0:property __ID="54" type="fast">false</p0:property>
+		<p0:property __ID="55" type="autocreate">true</p0:property>
+		<p0:property __ID="56" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="57" type="awa@DESKTOP-MELI7GV_805">
+		<p0:property __ID="58" type="fast">false</p0:property>
+		<p0:property __ID="59" type="autocreate">true</p0:property>
+		<p0:property __ID="60" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="61" type="awa@DESKTOP-MELI7GV_9b2">
+		<p0:property __ID="62" type="fast">false</p0:property>
+		<p0:property __ID="63" type="autocreate">true</p0:property>
+		<p0:property __ID="64" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="65" type="awa@DESKTOP-MELI7GV_9bb">
+		<p0:property __ID="66" type="fast">false</p0:property>
+		<p0:property __ID="67" type="autocreate">true</p0:property>
+		<p0:property __ID="68" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="69" type="awa@DESKTOP-MELI7GV_362">
+		<p0:property __ID="70" type="fast">false</p0:property>
+		<p0:property __ID="71" type="autocreate">true</p0:property>
+		<p0:property __ID="72" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="73" type="awa@DESKTOP-MELI7GV_6eb">
+		<p0:property __ID="74" type="fast">false</p0:property>
+		<p0:property __ID="75" type="autocreate">true</p0:property>
+		<p0:property __ID="76" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="77" type="awa@DESKTOP-MELI7GV_7d9">
+		<p0:property __ID="78" type="fast">false</p0:property>
+		<p0:property __ID="79" type="autocreate">true</p0:property>
+		<p0:property __ID="80" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="81" type="awa@DESKTOP-MELI7GV_813">
+		<p0:property __ID="82" type="fast">false</p0:property>
+		<p0:property __ID="83" type="autocreate">true</p0:property>
+		<p0:property __ID="84" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="85" type="awa@DESKTOP-MELI7GV_5b6">
+		<p0:property __ID="86" type="fast">false</p0:property>
+		<p0:property __ID="87" type="autocreate">true</p0:property>
+		<p0:property __ID="88" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="89" type="awa@DESKTOP-MELI7GV_2d9">
+		<p0:property __ID="90" type="fast">false</p0:property>
+		<p0:property __ID="91" type="autocreate">true</p0:property>
+		<p0:property __ID="92" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="93" type="awa@DESKTOP-MELI7GV_ee6">
+		<p0:property __ID="94" type="fast">false</p0:property>
+		<p0:property __ID="95" type="autocreate">true</p0:property>
+		<p0:property __ID="96" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="97" type="awa@DESKTOP-MELI7GV_482">
+		<p0:property __ID="98" type="fast">false</p0:property>
+		<p0:property __ID="99" type="autocreate">true</p0:property>
+		<p0:property __ID="100" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="101" type="awa@DESKTOP-MELI7GV_0a9">
+		<p0:property __ID="102" type="fast">false</p0:property>
+		<p0:property __ID="103" type="autocreate">true</p0:property>
+		<p0:property __ID="104" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="105" type="awa@DESKTOP-MELI7GV_76e">
+		<p0:property __ID="106" type="fast">false</p0:property>
+		<p0:property __ID="107" type="autocreate">true</p0:property>
+		<p0:property __ID="108" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="109" type="awa@DESKTOP-MELI7GV_f77">
+		<p0:property __ID="110" type="fast">false</p0:property>
+		<p0:property __ID="111" type="autocreate">true</p0:property>
+		<p0:property __ID="112" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="113" type="awa@DESKTOP-MELI7GV_b3e">
+		<p0:property __ID="114" type="fast">false</p0:property>
+		<p0:property __ID="115" type="autocreate">true</p0:property>
+		<p0:property __ID="116" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="117" type="awa@DESKTOP-MELI7GV_9fe">
+		<p0:property __ID="118" type="fast">false</p0:property>
+		<p0:property __ID="119" type="autocreate">true</p0:property>
+		<p0:property __ID="120" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="121" type="awa@DESKTOP-MELI7GV_196">
+		<p0:property __ID="122" type="fast">false</p0:property>
+		<p0:property __ID="123" type="autocreate">true</p0:property>
+		<p0:property __ID="124" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="125" type="awa@DESKTOP-MELI7GV_9d8">
+		<p0:property __ID="126" type="fast">false</p0:property>
+		<p0:property __ID="127" type="autocreate">true</p0:property>
+		<p0:property __ID="128" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="129" type="awa@DESKTOP-MELI7GV_fe9">
+		<p0:property __ID="130" type="fast">false</p0:property>
+		<p0:property __ID="131" type="autocreate">true</p0:property>
+		<p0:property __ID="132" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="133" type="awa@DESKTOP-MELI7GV_782">
+		<p0:property __ID="134" type="fast">false</p0:property>
+		<p0:property __ID="135" type="autocreate">true</p0:property>
+		<p0:property __ID="136" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="137" type="awa@DESKTOP-MELI7GV_a3f">
+		<p0:property __ID="138" type="fast">false</p0:property>
+		<p0:property __ID="139" type="autocreate">true</p0:property>
+		<p0:property __ID="140" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="141" type="awa@DESKTOP-MELI7GV_ebb">
+		<p0:property __ID="142" type="fast">false</p0:property>
+		<p0:property __ID="143" type="autocreate">true</p0:property>
+		<p0:property __ID="144" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="145" type="awa@DESKTOP-MELI7GV_c4d">
+		<p0:property __ID="146" type="fast">false</p0:property>
+		<p0:property __ID="147" type="autocreate">true</p0:property>
+		<p0:property __ID="148" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="149" type="awa@DESKTOP-MELI7GV_9f8">
+		<p0:property __ID="150" type="fast">false</p0:property>
+		<p0:property __ID="151" type="autocreate">true</p0:property>
+		<p0:property __ID="152" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="153" type="awa@DESKTOP-MELI7GV_472">
+		<p0:property __ID="154" type="fast">false</p0:property>
+		<p0:property __ID="155" type="autocreate">true</p0:property>
+		<p0:property __ID="156" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="157" type="awa@DESKTOP-MELI7GV_a12">
+		<p0:property __ID="158" type="fast">false</p0:property>
+		<p0:property __ID="159" type="autocreate">true</p0:property>
+		<p0:property __ID="160" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="161" type="awa@DESKTOP-MELI7GV_fcd">
+		<p0:property __ID="162" type="fast">false</p0:property>
+		<p0:property __ID="163" type="autocreate">true</p0:property>
+		<p0:property __ID="164" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="165" type="awa@DESKTOP-MELI7GV_e08">
+		<p0:property __ID="166" type="fast">false</p0:property>
+		<p0:property __ID="167" type="autocreate">true</p0:property>
+		<p0:property __ID="168" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="169" type="awa@DESKTOP-MELI7GV_b6e">
+		<p0:property __ID="170" type="fast">false</p0:property>
+		<p0:property __ID="171" type="autocreate">true</p0:property>
+		<p0:property __ID="172" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="173" type="awa@DESKTOP-MELI7GV_761">
+		<p0:property __ID="174" type="fast">false</p0:property>
+		<p0:property __ID="175" type="autocreate">true</p0:property>
+		<p0:property __ID="176" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="177" type="TestCenterPlugin">
+		<p0:properties __ID="178" type="mpanel">
+			<p0:property __ID="179" type="tree"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<p0:TreeProperties xmlns:p0="typeinfo:jadex.base.gui.filetree" __ID="0">
+	<expandedNodes>
+		<p0:NodePath__1 __ID="1" __len="0"></p0:NodePath__1>
+	</expandedNodes>
+	<rootPathEntries>
+		<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="2" __len="0"></p1:String__1>
+	</rootPathEntries>
+</p0:TreeProperties>
+]]></p0:property>
+			<p0:properties __ID="180" type="mic">
+				<p0:property __ID="181" type="Micro Agent">true</p0:property>
+				<p0:property __ID="182" type="BPMN Legacy Process">true</p0:property>
+				<p0:property __ID="183" type="BDIV3 Agent">true</p0:property>
+				<p0:property __ID="184" type="Component">true</p0:property>
+				<p0:property __ID="185" type="BPMN Process">true</p0:property>
+			</p0:properties>
+		</p0:properties>
+		<p0:properties __ID="186" type="tcpanel">
+			<p0:property __ID="187" type="timeout">20000</p0:property>
+			<p0:property __ID="188" type="concurrency">1</p0:property>
+			<p0:property __ID="189" type="allowduplicates">false</p0:property>
+		</p0:properties>
+	</p0:properties>
+	<p0:properties __ID="190" type="awa@DESKTOP-MELI7GV_770">
+		<p0:property __ID="191" type="fast">false</p0:property>
+		<p0:property __ID="192" type="autocreate">true</p0:property>
+		<p0:property __ID="193" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="194" type="awa@DESKTOP-MELI7GV_4d4">
+		<p0:property __ID="195" type="fast">false</p0:property>
+		<p0:property __ID="196" type="autocreate">true</p0:property>
+		<p0:property __ID="197" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="198" type="awa@DESKTOP-MELI7GV_449">
+		<p0:property __ID="199" type="fast">false</p0:property>
+		<p0:property __ID="200" type="autocreate">true</p0:property>
+		<p0:property __ID="201" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="202" type="awa@DESKTOP-MELI7GV_db5">
+		<p0:property __ID="203" type="fast">false</p0:property>
+		<p0:property __ID="204" type="autocreate">true</p0:property>
+		<p0:property __ID="205" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="206" type="awa@DESKTOP-MELI7GV_31e">
+		<p0:property __ID="207" type="fast">false</p0:property>
+		<p0:property __ID="208" type="autocreate">true</p0:property>
+		<p0:property __ID="209" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="210" type="awa@DESKTOP-MELI7GV_05c">
+		<p0:property __ID="211" type="fast">false</p0:property>
+		<p0:property __ID="212" type="autocreate">true</p0:property>
+		<p0:property __ID="213" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="214" type="awa@DESKTOP-MELI7GV_d7e">
+		<p0:property __ID="215" type="fast">false</p0:property>
+		<p0:property __ID="216" type="autocreate">true</p0:property>
+		<p0:property __ID="217" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="218" type="awa@DESKTOP-MELI7GV_526">
+		<p0:property __ID="219" type="fast">false</p0:property>
+		<p0:property __ID="220" type="autocreate">true</p0:property>
+		<p0:property __ID="221" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="222" type="awa@DESKTOP-MELI7GV_c0c">
+		<p0:property __ID="223" type="fast">false</p0:property>
+		<p0:property __ID="224" type="autocreate">true</p0:property>
+		<p0:property __ID="225" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="226" type="awa@DESKTOP-MELI7GV_215">
+		<p0:property __ID="227" type="fast">false</p0:property>
+		<p0:property __ID="228" type="autocreate">true</p0:property>
+		<p0:property __ID="229" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="230" type="awa@DESKTOP-MELI7GV_161">
+		<p0:property __ID="231" type="fast">false</p0:property>
+		<p0:property __ID="232" type="autocreate">true</p0:property>
+		<p0:property __ID="233" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="234" type="awa@DESKTOP-MELI7GV_cd6">
+		<p0:property __ID="235" type="fast">false</p0:property>
+		<p0:property __ID="236" type="autocreate">true</p0:property>
+		<p0:property __ID="237" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="238" type="awa@DESKTOP-MELI7GV_ea6">
+		<p0:property __ID="239" type="fast">false</p0:property>
+		<p0:property __ID="240" type="autocreate">true</p0:property>
+		<p0:property __ID="241" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="242" type="awa@DESKTOP-MELI7GV_364">
+		<p0:property __ID="243" type="fast">false</p0:property>
+		<p0:property __ID="244" type="autocreate">true</p0:property>
+		<p0:property __ID="245" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="246" type="awa@DESKTOP-MELI7GV_4d1">
+		<p0:property __ID="247" type="fast">false</p0:property>
+		<p0:property __ID="248" type="autocreate">true</p0:property>
+		<p0:property __ID="249" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="250" type="awa@DESKTOP-MELI7GV_dc8">
+		<p0:property __ID="251" type="fast">false</p0:property>
+		<p0:property __ID="252" type="autocreate">true</p0:property>
+		<p0:property __ID="253" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="254" type="awa@DESKTOP-MELI7GV_599">
+		<p0:property __ID="255" type="fast">false</p0:property>
+		<p0:property __ID="256" type="autocreate">true</p0:property>
+		<p0:property __ID="257" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="258" type="awa@DESKTOP-MELI7GV_7e9">
+		<p0:property __ID="259" type="fast">false</p0:property>
+		<p0:property __ID="260" type="autocreate">true</p0:property>
+		<p0:property __ID="261" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="262" type="awa@DESKTOP-MELI7GV_007">
+		<p0:property __ID="263" type="fast">false</p0:property>
+		<p0:property __ID="264" type="autocreate">true</p0:property>
+		<p0:property __ID="265" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="266" type="awa@DESKTOP-MELI7GV_894">
+		<p0:property __ID="267" type="fast">false</p0:property>
+		<p0:property __ID="268" type="autocreate">true</p0:property>
+		<p0:property __ID="269" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="270" type="awa@DESKTOP-MELI7GV_12d">
+		<p0:property __ID="271" type="fast">false</p0:property>
+		<p0:property __ID="272" type="autocreate">true</p0:property>
+		<p0:property __ID="273" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="274" type="awa@DESKTOP-MELI7GV_c75">
+		<p0:property __ID="275" type="fast">false</p0:property>
+		<p0:property __ID="276" type="autocreate">true</p0:property>
+		<p0:property __ID="277" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="278" type="awa@DESKTOP-MELI7GV_a6f">
+		<p0:property __ID="279" type="fast">false</p0:property>
+		<p0:property __ID="280" type="autocreate">true</p0:property>
+		<p0:property __ID="281" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="282" type="awa@DESKTOP-MELI7GV_45a">
+		<p0:property __ID="283" type="fast">false</p0:property>
+		<p0:property __ID="284" type="autocreate">true</p0:property>
+		<p0:property __ID="285" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="286" type="awa@DESKTOP-MELI7GV_2e8">
+		<p0:property __ID="287" type="fast">false</p0:property>
+		<p0:property __ID="288" type="autocreate">true</p0:property>
+		<p0:property __ID="289" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="290" type="awa@DESKTOP-MELI7GV_99a">
+		<p0:property __ID="291" type="fast">false</p0:property>
+		<p0:property __ID="292" type="autocreate">true</p0:property>
+		<p0:property __ID="293" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="294" type="awa@DESKTOP-MELI7GV_86a">
+		<p0:property __ID="295" type="fast">false</p0:property>
+		<p0:property __ID="296" type="autocreate">true</p0:property>
+		<p0:property __ID="297" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="298" type="awa@DESKTOP-MELI7GV_a59">
+		<p0:property __ID="299" type="fast">false</p0:property>
+		<p0:property __ID="300" type="autocreate">true</p0:property>
+		<p0:property __ID="301" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="302" type="awa@DESKTOP-MELI7GV_080">
+		<p0:property __ID="303" type="fast">false</p0:property>
+		<p0:property __ID="304" type="autocreate">true</p0:property>
+		<p0:property __ID="305" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="306" type="awa@DESKTOP-MELI7GV_5ad">
+		<p0:property __ID="307" type="fast">false</p0:property>
+		<p0:property __ID="308" type="autocreate">true</p0:property>
+		<p0:property __ID="309" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="310" type="awa@DESKTOP-MELI7GV_bc9">
+		<p0:property __ID="311" type="fast">false</p0:property>
+		<p0:property __ID="312" type="autocreate">true</p0:property>
+		<p0:property __ID="313" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="314" type="awa@DESKTOP-MELI7GV_44f">
+		<p0:property __ID="315" type="fast">false</p0:property>
+		<p0:property __ID="316" type="autocreate">true</p0:property>
+		<p0:property __ID="317" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="318" type="awa@DESKTOP-MELI7GV_350">
+		<p0:property __ID="319" type="fast">false</p0:property>
+		<p0:property __ID="320" type="autocreate">true</p0:property>
+		<p0:property __ID="321" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="322" type="awa@DESKTOP-MELI7GV_48d">
+		<p0:property __ID="323" type="fast">false</p0:property>
+		<p0:property __ID="324" type="autocreate">true</p0:property>
+		<p0:property __ID="325" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="326" type="awa@DESKTOP-MELI7GV_059">
+		<p0:property __ID="327" type="fast">false</p0:property>
+		<p0:property __ID="328" type="autocreate">true</p0:property>
+		<p0:property __ID="329" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="330" type="awa@DESKTOP-MELI7GV_87f">
+		<p0:property __ID="331" type="fast">false</p0:property>
+		<p0:property __ID="332" type="autocreate">true</p0:property>
+		<p0:property __ID="333" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="334" type="awa@DESKTOP-MELI7GV_f11">
+		<p0:property __ID="335" type="fast">false</p0:property>
+		<p0:property __ID="336" type="autocreate">true</p0:property>
+		<p0:property __ID="337" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="338" type="awa@DESKTOP-MELI7GV_030">
+		<p0:property __ID="339" type="fast">false</p0:property>
+		<p0:property __ID="340" type="autocreate">true</p0:property>
+		<p0:property __ID="341" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="342" type="awa@DESKTOP-MELI7GV_bee">
+		<p0:property __ID="343" type="fast">false</p0:property>
+		<p0:property __ID="344" type="autocreate">true</p0:property>
+		<p0:property __ID="345" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="346" type="awa@DESKTOP-MELI7GV_6de">
+		<p0:property __ID="347" type="fast">false</p0:property>
+		<p0:property __ID="348" type="autocreate">true</p0:property>
+		<p0:property __ID="349" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="350" type="awa@DESKTOP-MELI7GV_733">
+		<p0:property __ID="351" type="fast">false</p0:property>
+		<p0:property __ID="352" type="autocreate">true</p0:property>
+		<p0:property __ID="353" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="354" type="awa@DESKTOP-MELI7GV_15c">
+		<p0:property __ID="355" type="fast">false</p0:property>
+		<p0:property __ID="356" type="autocreate">true</p0:property>
+		<p0:property __ID="357" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="358" type="awa@DESKTOP-MELI7GV_de2">
+		<p0:property __ID="359" type="fast">false</p0:property>
+		<p0:property __ID="360" type="autocreate">true</p0:property>
+		<p0:property __ID="361" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="362" type="awa@DESKTOP-MELI7GV_792">
+		<p0:property __ID="363" type="fast">false</p0:property>
+		<p0:property __ID="364" type="autocreate">true</p0:property>
+		<p0:property __ID="365" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="366" type="StarterServicePanel">
+		<p0:properties __ID="367" type="mpanel">
+			<p0:property __ID="368" type="tree"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<p0:TreeProperties xmlns:p0="typeinfo:jadex.base.gui.filetree" __ID="0">
+	<expandedNodes>
+		<p0:NodePath__1 __ID="1" __len="1">
+			<entries>
+				<p0:NodePath __ID="2" entry="0">
+					<path>
+						<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="3" __len="0"></p1:String__1>
+					</path>
+				</p0:NodePath>
+			</entries>
+		</p0:NodePath__1>
+	</expandedNodes>
+	<selectedNode>
+		<p0:NodePath __ID="4" entry="0">
+			<path>
+				<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="5" __len="1">
+					<entries>
+						<p1:String __ID="6">MarketAgentBDI.class</p1:String>
+					</entries>
+				</p1:String__1>
+			</path>
+		</p0:NodePath>
+	</selectedNode>
+	<rootPathEntries>
+		<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="7" __len="1">
+			<entries>
+				<p1:String __ID="8">target\classes\tutorial</p1:String>
+			</entries>
+		</p1:String__1>
+	</rootPathEntries>
+</p0:TreeProperties>
+]]></p0:property>
+			<p0:properties __ID="369" type="mic">
+				<p0:property __ID="370" type="Micro Agent">true</p0:property>
+				<p0:property __ID="371" type="BPMN Legacy Process">true</p0:property>
+				<p0:property __ID="372" type="BDIV3 Agent">true</p0:property>
+				<p0:property __ID="373" type="Component">true</p0:property>
+				<p0:property __ID="374" type="BPMN Process">true</p0:property>
+			</p0:properties>
+		</p0:properties>
+		<p0:properties __ID="375" type="spanel">
+			<p0:property __ID="376" type="model">target\classes\tutorial\MarketAgentBDI.class</p0:property>
+			<p0:property __ID="377" type="ridurl">file:target/classes/tutorial</p0:property>
+			<p0:property __ID="378" type="globalrid"></p0:property>
+			<p0:property __ID="379" type="startsuspended">false</p0:property>
+			<p0:property __ID="380" type="autogenerate">false</p0:property>
+			<p0:property __ID="381" type="number">1</p0:property>
+			<p0:property __ID="382" type="name">Market</p0:property>
+		</p0:properties>
+	</p0:properties>
+	<p0:properties __ID="383" type="clockservice">
+		<p0:property __ID="384" type="type">system</p0:property>
+		<p0:property __ID="385" type="delta">100</p0:property>
+		<p0:property __ID="386" type="dilation">1.0</p0:property>
+	</p0:properties>
+	<p0:properties __ID="387" type="simulationservice">
+		<p0:property __ID="388" type="executing">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="389" type="chat">
+		<p0:property __ID="390" type="nickname">user_f88</p0:property>
+	</p0:properties>
+	<p0:properties __ID="391" type="awa@DESKTOP-MELI7GV_92a">
+		<p0:property __ID="392" type="fast">false</p0:property>
+		<p0:property __ID="393" type="autocreate">true</p0:property>
+		<p0:property __ID="394" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="395" type="securityservice">
+		<p0:property __ID="396" type="validityduration">327680</p0:property>
+		<p0:property __ID="397" type="usepass">true</p0:property>
+		<p0:property __ID="398" type="password">8a5af6d9-2ef</p0:property>
+		<p0:property __ID="399" type="selected_mechanism">0</p0:property>
+		<p0:property __ID="400" type="trustedlan">false</p0:property>
+		<p0:property __ID="401" type="storepath">./keystore</p0:property>
+		<p0:property __ID="402" type="storepass">keystore</p0:property>
+		<p0:property __ID="403" type="keypass">keystore</p0:property>
+		<p0:property __ID="404" type="selmech">0</p0:property>
+		<p0:properties __ID="405" type="DecentralizedAcquisitionMechanism">
+			<p0:property __ID="406" type="responses">1</p0:property>
+		</p0:properties>
+		<p0:properties __ID="407" type="TTPAcquisitionMechanism">
+			<p0:property __ID="408" type="verify">true</p0:property>
+		</p0:properties>
+	</p0:properties>
+</p0:properties>
