@@ -1,9 +1,11 @@
 package tutorial;
 
-import jadex.bdiv3.annotation.Belief;
-import jadex.bdiv3.annotation.Plan;
-import jadex.bdiv3.annotation.Trigger;
+import jadex.bdiv3.IBDIAgent;
+import jadex.bdiv3.annotation.*;
 import jadex.bdiv3.features.IBDIAgentFeature;
+import jadex.bridge.service.annotation.Service;
+import jadex.commons.future.Future;
+import jadex.commons.future.IFuture;
 import jadex.micro.MicroAgentFactory;
 import jadex.micro.annotation.*;
 import yahoofinance.Stock;
@@ -18,6 +20,7 @@ import java.util.*;
  * Created by Cenas on 10/13/2016.
  */
 @Agent
+@ProvidedServices(@ProvidedService(name="transser", type=UpdateMarketService.class,implementation=@Implementation(IBDIAgent.class)))
 @Description("Market.")
 public class MarketAgentBDI {
 
@@ -25,9 +28,12 @@ public class MarketAgentBDI {
 
     private Map<String,List<HistoricalQuote>> stockHist;
 
-   private String[] symbols = new String[] {"INTC"/*, "BABA", "TSLA", "YHOO", "GOOG"*/};
 
     private int days;
+
+
+    @Belief
+    private String[] symbols = new String[] {"INTC"/*, "BABA", "TSLA", "YHOO", "GOOG"*/};
 
     @Belief
     private Map<String,List<HistoricalQuote>> Market;
@@ -74,11 +80,7 @@ public class MarketAgentBDI {
     @Plan(trigger=@Trigger(factchangeds="time"))
     protected void updateMarketPlan(){
         updateMarket();
-        System.out.println(Market.get("INTC").size());
     }
-
-
-
 
 
     private void initMarket(){
@@ -106,19 +108,26 @@ public class MarketAgentBDI {
             stockHist.put(symbols[i],stocks.get(symbols[i]).getHistory(from, to, Interval.DAILY));
         }
 
-        System.out.println(stockHist.get("INTC").get(0).getDate().getTime());
-        System.out.println(stockHist.get("INTC").get(252).getDate().getTime());
-
-        System.out.println(stockHist.get("INTC").get(0).getClose());
-        System.out.println(stockHist.get("INTC").get(0).getHigh());
-        System.out.println(stockHist.get("INTC").get(0).getOpen());
-
-
-       /* for(int i=0;i<symbols.length;i++){
-            System.out.println(stocks.get(symbols[i]).getSymbol());
-        }
-        */
     }
+
+
+    @Plan(trigger=@Trigger(service=@ServiceTrigger(type=UpdateMarketService.class)))
+    public class UpdateMarketServ
+    {
+
+        @PlanBody
+        public Map<String,HistoricalQuote> body()
+        {
+            Map<String,HistoricalQuote> updatedValue = new HashMap<String, HistoricalQuote>();
+
+            for(int i=0;i<symbols.length;i++){
+                updatedValue.put(symbols[i],Market.get(symbols[i]).get(days));
+            }
+
+            return updatedValue;
+        }
+    }
+
 
 
 }
