@@ -1,9 +1,10 @@
-package tutorial;
+package tutorial.Services;
 
 import jadex.bridge.service.annotation.Service;
 import jadex.commons.future.IFuture;
 import jadex.micro.annotation.ProvidedService;
 import jadex.micro.annotation.ProvidedServices;
+import yahoofinance.Stock;
 import yahoofinance.histquotes.HistoricalQuote;
 
 import java.util.ArrayList;

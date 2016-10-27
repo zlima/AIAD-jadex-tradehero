@@ -1,18 +1,14 @@
 package tutorial;
 
-import jadex.bdiv3.IBDIAgent;
 import jadex.bdiv3.annotation.*;
 import jadex.bdiv3.features.IBDIAgentFeature;
-import jadex.bdiv3.runtime.ChangeEvent;
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
-import jadex.bridge.service.annotation.Service;
 import jadex.bridge.service.search.SServiceProvider;
 import jadex.commons.future.DefaultResultListener;
-import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
-import jadex.micro.MicroAgentFactory;
 import jadex.micro.annotation.*;
+import tutorial.Services.UpdateMarketService;
 import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.HistoricalQuote;
@@ -80,7 +76,7 @@ public class MarketAgentBDI {
             return; //chegou ao fim dos dias
 
         for(int i=0; i< symbols.length;i++){
-            Market.get(symbols[i]).add(stockHist.get(symbols[i]).get(days));;
+            Market.get(symbols[i]).add(stockHist.get(symbols[i]).get(days));
         }
 
         days--;
@@ -139,12 +135,17 @@ public class MarketAgentBDI {
     }
 
     public void createLastQuoteHash(ArrayList<HashMap> quote){
-        HashMap test = new HashMap();
+        HashMap temp = new HashMap();
+
         for(int i=0; i<symbols.length;i++){
-            test.put("Symbol",symbols[i]);
-            test.put("Open",Market.get(symbols[i]).get(dayspassed-1).getOpen().doubleValue());
-            test.put("Close",Market.get(symbols[i]).get(dayspassed-1).getOpen().doubleValue());
-            quote.add(test);
+            temp.put("Symbol",symbols[i]);
+            temp.put("Open",Market.get(symbols[i]).get(dayspassed-1).getOpen().doubleValue());
+            temp.put("Close",Market.get(symbols[i]).get(dayspassed-1).getClose().doubleValue());
+            temp.put("High",Market.get(symbols[i]).get(dayspassed-1).getHigh().doubleValue());
+            temp.put("Low",Market.get(symbols[i]).get(dayspassed-1).getLow().doubleValue());
+            temp.put("Volume",Market.get(symbols[i]).get(dayspassed-1).getVolume().intValue());
+
+            quote.add(temp);
         }
     }
 
