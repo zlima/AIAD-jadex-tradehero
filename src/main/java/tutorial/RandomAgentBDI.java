@@ -8,10 +8,13 @@ import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.annotation.Service;
 import jadex.bridge.service.search.SServiceProvider;
+import jadex.commons.collection.SCollection;
+import jadex.commons.future.IFuture;
 import jadex.commons.future.IntermediateDefaultResultListener;
 import jadex.micro.annotation.*;
 import yahoofinance.histquotes.HistoricalQuote;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +24,10 @@ import java.util.Map;
  */
 
 @Agent
-
+@Service
+@ProvidedServices(@ProvidedService(type=UpdateMarketService.class))
 @Description("random agent")
-public class RandomAgentBDI {
+public class RandomAgentBDI implements UpdateMarketService {
 
     private double money; //dinheiro do agent
     private double winrate;
@@ -38,8 +42,7 @@ public class RandomAgentBDI {
     @AgentFeature
     protected IBDIAgentFeature bdiFeature;
 
-    @Agent
-    IInternalAccess agent;
+
 
 
     @AgentCreated
@@ -56,21 +59,10 @@ public class RandomAgentBDI {
     }
 
 
-    public void getMarketValues(){
 
-        SServiceProvider.getServices(agent, UpdateMarketService.class, RequiredServiceInfo.SCOPE_PLATFORM)
-                .addResultListener(new IntermediateDefaultResultListener<UpdateMarketService>() {
-                    public void intermediateResultAvailable(UpdateMarketService up) {
-                        System.out.println("oi");
-                        System.out.println(up.UpdateMarketService());
-                    }
-                });
+    public IFuture<Void> UpdateMarketService(final ArrayList<HashMap> quote) {
+
+        System.out.println(quote.get(0).get("Close"));
+        return null;
     }
-
-
-    @Plan(trigger=@Trigger(factchangeds="time"))
-    protected void updateMarketValues(){
-        getMarketValues();
-    }
-
 }

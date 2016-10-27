@@ -3,7 +3,12 @@ package tutorial;
 import jadex.bdiv3.IBDIAgent;
 import jadex.bdiv3.annotation.*;
 import jadex.bdiv3.features.IBDIAgentFeature;
+import jadex.bdiv3.runtime.ChangeEvent;
+import jadex.bridge.IInternalAccess;
+import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.annotation.Service;
+import jadex.bridge.service.search.SServiceProvider;
+import jadex.commons.future.DefaultResultListener;
 import jadex.commons.future.Future;
 import jadex.commons.future.IFuture;
 import jadex.micro.MicroAgentFactory;
@@ -20,23 +25,24 @@ import java.util.*;
  * Created by Cenas on 10/13/2016.
  */
 @Agent
-@ProvidedServices(@ProvidedService(name="transser", type=UpdateMarketService.class,implementation=@Implementation(IBDIAgent.class)))
 @Description("Market.")
 public class MarketAgentBDI {
 
     private Map<String, Stock> stocks;
 
     private Map<String,List<HistoricalQuote>> stockHist;
+    private UpdateMarketService serviço;
 
 
     private int days;
 
-
+    @Belief
+    private int dayspassed;
     @Belief
     private String[] symbols = new String[] {"INTC"/*, "BABA", "TSLA", "YHOO", "GOOG"*/};
 
     @Belief
-    private Map<String,List<HistoricalQuote>> Market;
+    private  Map<String,List<HistoricalQuote>> Market;
 
     @Belief(updaterate=1000)
     protected long time = System.currentTimeMillis();
@@ -44,16 +50,20 @@ public class MarketAgentBDI {
     @AgentFeature
     protected IBDIAgentFeature bdiFeature;
 
+    @Agent
+    IInternalAccess agent;
+
 
     @AgentCreated
     private void init(){
+        dayspassed = 0;
         try {
             getStocksHist();
         } catch (IOException e) {
             e.printStackTrace();
         }
             initMarket();
-        days =stockHist.get("INTC").size()-1;
+        days = stockHist.get("INTC").size()-1;
     }
 
     @AgentBody
@@ -70,10 +80,11 @@ public class MarketAgentBDI {
             return; //chegou ao fim dos dias
 
         for(int i=0; i< symbols.length;i++){
-            Market.get(symbols[i]).add(stockHist.get(symbols[i]).get(days));
+            Market.get(symbols[i]).add(stockHist.get(symbols[i]).get(days));;
         }
 
         days--;
+        dayspassed++;
 
     }
 
@@ -111,23 +122,34 @@ public class MarketAgentBDI {
     }
 
 
-    @Plan(trigger=@Trigger(service=@ServiceTrigger(type=UpdateMarketService.class)))
-    public class UpdateMarketServ
-    {
 
-        @PlanBody
-        public Map<String,HistoricalQuote> body()
-        {
-            Map<String,HistoricalQuote> updatedValue = new HashMap<String, HistoricalQuote>();
+    @Plan(trigger=@Trigger(factchangeds="dayspassed"))
+    public IFuture<Void> UpdateMarketService() {
+        SServiceProvider.getService(agent, UpdateMarketService.class, RequiredServiceInfo.SCOPE_PLATFORM)
+                .addResultListener(new DefaultResultListener<UpdateMarketService>() {
+                    public void resultAvailable(UpdateMarketService service) {
+                        ArrayList<HashMap> sendMarketVal = new ArrayList<HashMap>();
+                        createLastQuoteHash(sendMarketVal);
+                        sendLastMarketValues(service,sendMarketVal);
+                    }
+                });
 
-            for(int i=0;i<symbols.length;i++){
-                updatedValue.put(symbols[i],Market.get(symbols[i]).get(days));
-            }
+        return null;
 
-            return updatedValue;
+    }
+
+    public void createLastQuoteHash(ArrayList<HashMap> quote){
+        HashMap test = new HashMap();
+        for(int i=0; i<symbols.length;i++){
+            test.put("Symbol",symbols[i]);
+            test.put("Open",Market.get(symbols[i]).get(dayspassed-1).getOpen().doubleValue());
+            test.put("Close",Market.get(symbols[i]).get(dayspassed-1).getOpen().doubleValue());
+            quote.add(test);
         }
     }
 
-
+    public void sendLastMarketValues(UpdateMarketService service, ArrayList<HashMap> cenas) {
+        service.UpdateMarketService(cenas);
+    }
 
 }

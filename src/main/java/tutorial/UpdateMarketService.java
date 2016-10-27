@@ -6,6 +6,8 @@ import jadex.micro.annotation.ProvidedService;
 import jadex.micro.annotation.ProvidedServices;
 import yahoofinance.histquotes.HistoricalQuote;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,5 +17,5 @@ import java.util.Map;
 
 public interface UpdateMarketService {
 
-    public IFuture<Map<String,HistoricalQuote>> UpdateMarketService();
+    public IFuture<Void> UpdateMarketService(ArrayList<HashMap> quote);
 }
