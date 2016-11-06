@@ -1,5 +1,6 @@
 package tutorial.Services;
 
+import jadex.bridge.IComponentIdentifier;
 import jadex.commons.future.IFuture;
 
 import java.util.HashMap;
@@ -9,5 +10,5 @@ import java.util.HashMap;
  */
 public interface AgentRequestService {
 
-    public IFuture<Void> BuyStocksRequest();
+    public IFuture<Void> BuyStocksRequest(IComponentIdentifier agentid, String stockname, int quantity, double price);
 }

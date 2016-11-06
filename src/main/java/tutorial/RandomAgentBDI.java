@@ -2,10 +2,16 @@ package tutorial;
 
 import jadex.bdiv3.annotation.*;
 import jadex.bdiv3.features.IBDIAgentFeature;
+import jadex.bridge.IComponentIdentifier;
+import jadex.bridge.IInternalAccess;
+import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.annotation.Service;
+import jadex.bridge.service.search.SServiceProvider;
+import jadex.commons.future.DefaultResultListener;
 import jadex.commons.future.IFuture;
 import jadex.micro.annotation.*;
-import tutorial.Services.UpdateMarketService;
+import tutorial.Services.AgentRequestService;
+import tutorial.Services.MarketAgentService;
 import yahoofinance.histquotes.HistoricalQuote;
 
 import java.util.ArrayList;
@@ -19,9 +25,9 @@ import java.util.Map;
 
 @Agent
 @Service
-@ProvidedServices(@ProvidedService(type=UpdateMarketService.class))
+@ProvidedServices(@ProvidedService(type=MarketAgentService.class))
 @Description("random agent")
-public class RandomAgentBDI implements UpdateMarketService {
+public class RandomAgentBDI implements MarketAgentService {
 
     private double money; //dinheiro do agent
     private double winrate;
@@ -41,6 +47,8 @@ public class RandomAgentBDI implements UpdateMarketService {
 
     protected ArrayList<Stock> currentStockValues;
 
+    @Agent
+    IInternalAccess agent;
 
 
 
@@ -68,23 +76,50 @@ public class RandomAgentBDI implements UpdateMarketService {
             currentStockValues.add(tmpStock);
         }
 
-        if(updatedstock)
-            updatedstock = false;
-        else
-            updatedstock=true;
+        updatedstock = !updatedstock;
     }
 
 
     public IFuture<Void> UpdateMarketService(ArrayList<HashMap> quote) {
-
         parsetoStock(quote);
         //System.out.println(quote.get(0).getOpen());
         return null;
     }
 
-    @Plan(trigger=@Trigger(factchangeds="updatedstock"))
-    private void newStockReceived(){
-        System.out.println(currentStockValues.get(0).getClose());
-        System.out.println(currentStockValues.get(0).getOpen());
+    public IFuture<Void> ConfirmStockBuy(IComponentIdentifier agentid, String stockname, int quantity, double price) {
+
+        if(agentid == this.agent.getComponentIdentifier()) { //confirmaçao do mercado
+            if(money >= quantity*price){
+                money -= quantity*price;
+
+            }else{
+                //nao tem guito para comprar
+            }
+
+        }
+        return null;
     }
+
+    @Plan(trigger=@Trigger(factchangeds="updatedstock"))
+    public void newStockvalues(){
+        System.out.println("cenas 1: "+currentStockValues.get(currentStockValues.size()-1).getOpen());
+        buyStock("INTC",1,currentStockValues.get(currentStockValues.size()-1).getOpen());
+    }
+
+    private void buyStock(final String name,final int shares, final double price){
+
+            SServiceProvider.getService(agent, AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM)
+                    .addResultListener(new DefaultResultListener<AgentRequestService>() {
+                        public void resultAvailable(AgentRequestService service) {
+                            service.BuyStocksRequest(agent.getComponentIdentifier(),name,shares,price);
+                        }
+                    });
+
+
+            //System.out.println(currentStockValues.get(0).getClose());
+            //System.out.println(currentStockValues.get(0).getOpen());
+           // System.out.println("guitos: "+ this.money);
+        }
+
+
 }
