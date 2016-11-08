@@ -168,7 +168,6 @@ public class MarketAgentBDI implements AgentRequestService {
 
 
     public IFuture<Void> BuyStocksRequest(IComponentIdentifier agentid, String stockname, int quantity, double price) {
-        System.out.println("Cenas 2: "+Market.get(stockname).get(dayspassed-1).getOpen().doubleValue());
         if(Market.get(stockname).get(dayspassed-1).getOpen().doubleValue() == price)
         ConfirmStockBuy(agentid,stockname,quantity,price);
         return null;

@@ -32,6 +32,7 @@ public class RandomAgentBDI implements MarketAgentService {
     private double money; //dinheiro do agent
     private double winrate;
     private Map<String,Integer> stocksOwned;
+    private Map<String,Map<Integer,Double>>stockHist;
 
     @Belief
     private Map<String,List<HistoricalQuote>> Market;
@@ -57,7 +58,7 @@ public class RandomAgentBDI implements MarketAgentService {
         Market = new HashMap<String,List<HistoricalQuote>>();
         stocksOwned = new HashMap<String, Integer>();
         winrate = 0.0;
-        money = 10000000;
+        money = 0;
         currentStockValues = new ArrayList<Stock>();
         updatedstock = false;
     }
@@ -91,9 +92,20 @@ public class RandomAgentBDI implements MarketAgentService {
         if(agentid == this.agent.getComponentIdentifier()) { //confirmaçao do mercado
             if(money >= quantity*price){
                 money -= quantity*price;
+                System.out.println(money);
+                Map<Integer,Double> tmpstock = new HashMap<Integer, Double>();
+                tmpstock.put(quantity,price);
+                stockHist.put(stockname,tmpstock);
+                //guardar a stock
+                if(stocksOwned.get(stockname)!= null){
+                    stocksOwned.put(stockname,stocksOwned.get(stockname) + quantity);
+                }else{
+                    stocksOwned.put(stockname,quantity);
+                }
 
             }else{
                 //nao tem guito para comprar
+                System.out.println("fodeu");
             }
 
         }
@@ -102,8 +114,7 @@ public class RandomAgentBDI implements MarketAgentService {
 
     @Plan(trigger=@Trigger(factchangeds="updatedstock"))
     public void newStockvalues(){
-        System.out.println("cenas 1: "+currentStockValues.get(currentStockValues.size()-1).getOpen());
-        buyStock("INTC",1,currentStockValues.get(currentStockValues.size()-1).getOpen());
+        buyStock("INTC",30,currentStockValues.get(currentStockValues.size()-1).getOpen());
     }
 
     private void buyStock(final String name,final int shares, final double price){
@@ -114,11 +125,6 @@ public class RandomAgentBDI implements MarketAgentService {
                             service.BuyStocksRequest(agent.getComponentIdentifier(),name,shares,price);
                         }
                     });
-
-
-            //System.out.println(currentStockValues.get(0).getClose());
-            //System.out.println(currentStockValues.get(0).getOpen());
-           // System.out.println("guitos: "+ this.money);
         }
 
 
