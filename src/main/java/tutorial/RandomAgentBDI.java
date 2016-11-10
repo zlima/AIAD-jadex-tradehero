@@ -51,14 +51,12 @@ public class RandomAgentBDI implements MarketAgentService {
     @Agent
     IInternalAccess agent;
 
-
-
     @AgentCreated
     private void init(){
         Market = new HashMap<String,List<HistoricalQuote>>();
         stocksOwned = new HashMap<String, Integer>();
         winrate = 0.0;
-        money = 0;
+        money = 400000;
         currentStockValues = new ArrayList<Stock>();
         updatedstock = false;
     }
@@ -71,18 +69,18 @@ public class RandomAgentBDI implements MarketAgentService {
     private void parsetoStock(ArrayList<HashMap> quote){
         Stock tmpStock;
         currentStockValues.clear();
-        for(int i=0;i<quote.size();i++){
-            tmpStock = new Stock((String)quote.get(i).get("Symbol"),(Double)quote.get(i).get("Open"),(Double)quote.get(i).get("Close"),(Double)quote.get(i).get("High"),
-                    (Double)quote.get(i).get("Low"),(Integer) quote.get(i).get("Volume"));
+        for(int i = 0; i < quote.size(); i++){
+            tmpStock = new Stock((String)quote.get(i).get("Symbol"), (Double)quote.get(i).get("Open"), (Double)quote.get(i).get("Close"), (Double)quote.get(i).get("High"),
+                    (Double)quote.get(i).get("Low"), (Integer)quote.get(i).get("Volume"));
             currentStockValues.add(tmpStock);
         }
-
         updatedstock = !updatedstock;
     }
 
 
     public IFuture<Void> UpdateMarketService(ArrayList<HashMap> quote) {
-        parsetoStock(quote);
+        System.out.println(quote);
+        //parsetoStock(quote);
         //System.out.println(quote.get(0).getOpen());
         return null;
     }
