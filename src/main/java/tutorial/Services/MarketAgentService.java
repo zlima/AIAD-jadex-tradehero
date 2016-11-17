@@ -21,4 +21,5 @@ public interface MarketAgentService {
 
     public IFuture<Void> UpdateMarketService(ArrayList<HashMap> quote);
     public IFuture<Void> ConfirmStockBuy(IComponentIdentifier agentid, String stockname, int quantity, double price);
+    public IFuture<Void> ConfirmStockSell(IComponentIdentifier agentid, String stockname, int quantity, double price);
 }

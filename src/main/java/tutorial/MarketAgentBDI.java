@@ -169,8 +169,39 @@ public class MarketAgentBDI implements AgentRequestService {
     }
 
     public IFuture<Void> BuyStocksRequest(IComponentIdentifier agentid, String stockname, int quantity, double price) {
-        if(Market.get(stockname).get(dayspassed).getOpen().doubleValue() == price)
-            ConfirmStockBuy(agentid, stockname, quantity, price);
+
+        if(!openstatus) {
+            if (Market.get(stockname).get(dayspassed).getOpen().doubleValue() == price)
+                ConfirmStockBuy(agentid, stockname, quantity, price);
+        }
+        else{
+            if (Market.get(stockname).get(dayspassed).getClose().doubleValue() == price)
+                ConfirmStockBuy(agentid, stockname, quantity, price);
+        }
+        return null;
+    }
+
+    public IFuture<Void> SellStockRequest(IComponentIdentifier agentid, String stockname, int quantity, double price) {
+        System.out.println("ooooooooooooooooooooooooooooooooooooooooooooo");
+        if(!openstatus) {
+            if (Market.get(stockname).get(dayspassed).getOpen().doubleValue() == price)
+                ConfirmStockSell(agentid, stockname, quantity, price);
+        }
+        else{
+            if (Market.get(stockname).get(dayspassed).getClose().doubleValue() == price)
+                ConfirmStockSell(agentid, stockname, quantity, price);
+        }
+
+        return null;
+    }
+
+    public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price){
+        SServiceProvider.getService(agent, MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM)
+                .addResultListener(new DefaultResultListener<MarketAgentService>() {
+                    public void resultAvailable(MarketAgentService service) {
+                        service.ConfirmStockSell(agentid, stockname, quantity, price);
+                    }
+                });
         return null;
     }
 }

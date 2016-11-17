@@ -79,20 +79,21 @@ public class RandomAgentBDI implements MarketAgentService {
     }
 
     public IFuture<Void> ConfirmStockBuy(IComponentIdentifier agentid, String stockname, int quantity, double price) {
-        System.out.println("Zzzzz");
         if(agentid == this.agent.getComponentIdentifier()) { //confirmaçao do mercado
             if(money >= quantity*price){
 
                 money -= quantity*price;
 
                 stockHist.put(stockname,quantity);
-                System.out.println(money);
+
                 //guardar a stock
                 if(stocksOwned.get(stockname)!= null){
                     stocksOwned.put(stockname,stocksOwned.get(stockname) + quantity);
                 }else{
                     stocksOwned.put(stockname,quantity);
                 }
+
+                System.out.println("random agent comprou stock: "+ stockname + ": " + quantity);
 
             }else{
                 //nao tem guito para comprar
@@ -102,6 +103,27 @@ public class RandomAgentBDI implements MarketAgentService {
         }
         return null;
     }
+
+
+    public IFuture<Void> ConfirmStockSell(IComponentIdentifier agentid, String stockname, int quantity, double price) {
+        System.out.println("ndef");
+        if(stocksOwned.get(stockname)-quantity <= 0) {
+            stocksOwned.remove(stockname);
+        }else{
+
+            stocksOwned.put(stockname, stocksOwned.get(stockname) - quantity);
+
+        }
+
+            money += quantity*price;
+
+        System.out.println("vendeu   saldo: "+money);
+
+
+        return null;
+    }
+
+
 
     @Plan(trigger=@Trigger(factchangeds="updatedstock"))
     public void newStockvalues(){
@@ -121,9 +143,34 @@ public class RandomAgentBDI implements MarketAgentService {
         }
     }
 
+
+
+
     private void sellStock(){
-        System.out.println("vende");
-    }
+
+        if(stocksOwned.size() == 0){
+            return;
+        }
+        SServiceProvider.getService(agent, AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM)
+                .addResultListener(new DefaultResultListener<AgentRequestService>() {
+                    public void resultAvailable(AgentRequestService service) {
+                        Random rand = new Random();
+                        int n = rand.nextInt(stocksOwned.size());
+                        Object[] value2 = stocksOwned.keySet().toArray();
+                       String test = (String) value2[n];
+                        int rand2 = rand.nextInt(stocksOwned.get(test)+1);
+
+                        if (stockValues.get(stockValues.size() - 1).get(0).size() > 2) {
+                            service.SellStockRequest(agent.getComponentIdentifier(), (String) value2[n]
+                                    , rand2,(Double) stockValues.get(stockValues.size() - 1).get(n).get("Close") );
+                        }else{
+                            service.SellStockRequest(agent.getComponentIdentifier(), (String) value2[n]
+                                    , rand2,(Double) stockValues.get(stockValues.size() - 1).get(n).get("Open") );
+                        }
+                    }
+                });
+                }
+
 
     private void buyStock(){
             SServiceProvider.getService(agent, AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM)
