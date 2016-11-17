@@ -14,10 +14,7 @@ import tutorial.Services.AgentRequestService;
 import tutorial.Services.MarketAgentService;
 import yahoofinance.histquotes.HistoricalQuote;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Cenas on 10/19/2016.
@@ -32,7 +29,7 @@ public class RandomAgentBDI implements MarketAgentService {
     private double money; //dinheiro do agent
     private double winrate;
     private Map<String,Integer> stocksOwned;
-    private Map<String,Map<Integer,Double>>stockHist;
+    private Map<String,Integer>stockHist;
 
     @Belief
     private Map<String,List<HistoricalQuote>> Market;
@@ -46,7 +43,7 @@ public class RandomAgentBDI implements MarketAgentService {
     @Belief
     private boolean updatedstock;
 
-    protected ArrayList<Stock> currentStockValues;
+    protected ArrayList<ArrayList<HashMap>> stockValues;
 
     @Agent
     IInternalAccess agent;
@@ -57,8 +54,8 @@ public class RandomAgentBDI implements MarketAgentService {
         stocksOwned = new HashMap<String, Integer>();
         winrate = 0.0;
         money = 400000;
-        currentStockValues = new ArrayList<Stock>();
-        updatedstock = false;
+        stockValues = new ArrayList<ArrayList<HashMap>>();
+        stockHist = new HashMap<String, Integer>();
     }
 
     @AgentBody
@@ -66,34 +63,30 @@ public class RandomAgentBDI implements MarketAgentService {
 
     }
 
-    private void parsetoStock(ArrayList<HashMap> quote){
-        Stock tmpStock;
-        currentStockValues.clear();
-        for(int i = 0; i < quote.size(); i++){
-            tmpStock = new Stock((String)quote.get(i).get("Symbol"), (Double)quote.get(i).get("Open"), (Double)quote.get(i).get("Close"), (Double)quote.get(i).get("High"),
-                    (Double)quote.get(i).get("Low"), (Integer)quote.get(i).get("Volume"));
-            currentStockValues.add(tmpStock);
-        }
-        updatedstock = !updatedstock;
-    }
+
+
 
 
     public IFuture<Void> UpdateMarketService(ArrayList<HashMap> quote) {
-        System.out.println(quote);
+
+        stockValues.add(quote);
+        updatedstock = !updatedstock;
+
+       // System.out.println(stockValues.get(stockValues.size()-1).get(0).get("Symbol"));
         //parsetoStock(quote);
         //System.out.println(quote.get(0).getOpen());
         return null;
     }
 
     public IFuture<Void> ConfirmStockBuy(IComponentIdentifier agentid, String stockname, int quantity, double price) {
-
+        System.out.println("Zzzzz");
         if(agentid == this.agent.getComponentIdentifier()) { //confirmaçao do mercado
             if(money >= quantity*price){
+
                 money -= quantity*price;
+
+                stockHist.put(stockname,quantity);
                 System.out.println(money);
-                Map<Integer,Double> tmpstock = new HashMap<Integer, Double>();
-                tmpstock.put(quantity,price);
-                stockHist.put(stockname,tmpstock);
                 //guardar a stock
                 if(stocksOwned.get(stockname)!= null){
                     stocksOwned.put(stockname,stocksOwned.get(stockname) + quantity);
@@ -103,7 +96,7 @@ public class RandomAgentBDI implements MarketAgentService {
 
             }else{
                 //nao tem guito para comprar
-                System.out.println("fodeu");
+                System.out.println("rip");
             }
 
         }
@@ -112,17 +105,47 @@ public class RandomAgentBDI implements MarketAgentService {
 
     @Plan(trigger=@Trigger(factchangeds="updatedstock"))
     public void newStockvalues(){
-        buyStock("INTC",30,currentStockValues.get(currentStockValues.size()-1).getOpen());
+        Random rand = new Random();
+        int  n = rand.nextInt(3);
+
+        switch (n){
+            case 0:
+                buyStock();
+                break;
+            case 1:
+                sellStock();
+                break;
+            case 2:
+                System.out.println("ignora");
+                break;//nao fazer nada
+        }
     }
 
-    private void buyStock(final String name,final int shares, final double price){
+    private void sellStock(){
+        System.out.println("vende");
+    }
 
+    private void buyStock(){
             SServiceProvider.getService(agent, AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM)
                     .addResultListener(new DefaultResultListener<AgentRequestService>() {
                         public void resultAvailable(AgentRequestService service) {
-                            service.BuyStocksRequest(agent.getComponentIdentifier(),name,shares,price);
+                            Random rand = new Random();
+                            int n = rand.nextInt(stockValues.get(stockValues.size() - 1).size());//escolher uma stock para comprar
+
+                            if (stockValues.get(stockValues.size() - 1).get(0).size() > 2) {//close
+
+                                double test = money / (Double) stockValues.get(stockValues.size() - 1).get(n).get("Close");
+                                int rand2 = rand.nextInt((int) test);
+                                service.BuyStocksRequest(agent.getComponentIdentifier(), (String) stockValues.get(stockValues.size() - 1).get(n).get("Symbol"), rand2,
+                                        (Double) stockValues.get(stockValues.size() - 1).get(n).get("Close"));
+                            } else {
+                                double test = money / (Double) stockValues.get(stockValues.size() - 1).get(n).get("Open");
+                                int rand2 = rand.nextInt((int) test);
+                                service.BuyStocksRequest(agent.getComponentIdentifier(), (String) stockValues.get(stockValues.size() - 1).get(n).get("Symbol"), rand2,
+                                        (Double) stockValues.get(stockValues.size() - 1).get(n).get("Open"));
+                            }
                         }
-                    });
+                        });
         }
 
 

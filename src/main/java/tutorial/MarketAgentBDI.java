@@ -41,7 +41,7 @@ public class MarketAgentBDI implements AgentRequestService {
     private int dayspassed;
 
     @Belief
-    private String[] symbols = new String[] {"INTC"/*, "BABA", "TSLA", "YHOO", "GOOG"*/};
+    private String[] symbols = new String[] {"INTC", "BABA"/*, "TSLA", "YHOO", "GOOG"*/};
 
     @Belief
     private Map<String,List<HistoricalQuote>> Market;
@@ -138,9 +138,9 @@ public class MarketAgentBDI implements AgentRequestService {
     }
 
     public void createLastQuoteHash(ArrayList<HashMap> quote){
-        HashMap temp = new HashMap();
 
         for(int i = 0; i < symbols.length; i++){
+            HashMap temp = new HashMap();
             temp.put("Symbol", symbols[i]);
             if(!openstatus)
                 temp.put("Open", Market.get(symbols[i]).get(dayspassed).getOpen().doubleValue());
