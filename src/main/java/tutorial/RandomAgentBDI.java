@@ -149,6 +149,7 @@ public class RandomAgentBDI implements MarketAgentService {
     private void sellStock(){
 
         if(stocksOwned.size() == 0){
+            System.out.println("ignora, sem stocks");
             return;
         }
         SServiceProvider.getService(agent, AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM)
@@ -157,15 +158,24 @@ public class RandomAgentBDI implements MarketAgentService {
                         Random rand = new Random();
                         int n = rand.nextInt(stocksOwned.size());
                         Object[] value2 = stocksOwned.keySet().toArray();
-                       String test = (String) value2[n];
-                        int rand2 = rand.nextInt(stocksOwned.get(test)+1);
+                        String symbol = (String) value2[n];
+                        int rand2 = rand.nextInt(stocksOwned.get(symbol)+1);
+
+                        int j = 0;
+                        for(int i = 0; i < stockValues.size(); i++){
+                            ArrayList<HashMap> temp = stockValues.get(i);
+                            for(j = 0; j < temp.size(); j++){
+                                if(symbol == temp.get(j).get("Symbol"))
+                                    break;
+                            }
+                        }
 
                         if (stockValues.get(stockValues.size() - 1).get(0).size() > 2) {
-                            service.SellStockRequest(agent.getComponentIdentifier(), (String) value2[n]
-                                    , rand2,(Double) stockValues.get(stockValues.size() - 1).get(n).get("Close") );
+                            service.SellStockRequest(agent.getComponentIdentifier(), symbol
+                                    , rand2,(Double) stockValues.get(stockValues.size() - 1).get(j).get("Close") );
                         }else{
-                            service.SellStockRequest(agent.getComponentIdentifier(), (String) value2[n]
-                                    , rand2,(Double) stockValues.get(stockValues.size() - 1).get(n).get("Open") );
+                            service.SellStockRequest(agent.getComponentIdentifier(), symbol
+                                    , rand2,(Double) stockValues.get(stockValues.size() - 1).get(j).get("Open") );
                         }
                     }
                 });
@@ -179,7 +189,7 @@ public class RandomAgentBDI implements MarketAgentService {
                             Random rand = new Random();
                             int n = rand.nextInt(stockValues.get(stockValues.size() - 1).size());//escolher uma stock para comprar
 
-                            if (stockValues.get(stockValues.size() - 1).get(0).size() > 2) {//close
+                            if (stockValues.get(stockValues.size() - 1).get(n).size() > 2) {//close
 
                                 double test = money / (Double) stockValues.get(stockValues.size() - 1).get(n).get("Close");
                                 int rand2 = rand.nextInt((int) test);

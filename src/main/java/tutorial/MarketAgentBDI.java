@@ -184,12 +184,28 @@ public class MarketAgentBDI implements AgentRequestService {
     public IFuture<Void> SellStockRequest(IComponentIdentifier agentid, String stockname, int quantity, double price) {
         System.out.println("ooooooooooooooooooooooooooooooooooooooooooooo");
         if(!openstatus) {
-            if (Market.get(stockname).get(dayspassed).getOpen().doubleValue() == price)
+            if (Market.get(stockname).get(dayspassed).getOpen().doubleValue() == price) {
+                System.out.print("Valor 1: ");
+                System.out.println(Market.get(stockname).get(dayspassed).getOpen().doubleValue());
+                System.out.print("Valor 2: ");
+                System.out.println(price);
                 ConfirmStockSell(agentid, stockname, quantity, price);
+            }
+            else {
+                System.out.print("Valor 1: ");
+                System.out.println(Market.get(stockname).get(dayspassed).getOpen().doubleValue());
+                System.out.print("Valor 1 close: ");
+                System.out.println(Market.get(stockname).get(dayspassed).getClose().doubleValue());
+                System.out.print("Valor 2: ");
+                System.out.println(price);
+                System.out.println("Demoraste muito a vender!");
+            }
         }
         else{
             if (Market.get(stockname).get(dayspassed).getClose().doubleValue() == price)
                 ConfirmStockSell(agentid, stockname, quantity, price);
+            else
+                System.out.println("Demoraste muito a vender!2");
         }
 
         return null;
@@ -199,6 +215,7 @@ public class MarketAgentBDI implements AgentRequestService {
         SServiceProvider.getService(agent, MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM)
                 .addResultListener(new DefaultResultListener<MarketAgentService>() {
                     public void resultAvailable(MarketAgentService service) {
+                        System.out.println("Envio de mensagem de venda");
                         service.ConfirmStockSell(agentid, stockname, quantity, price);
                     }
                 });
