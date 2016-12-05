@@ -83,7 +83,7 @@ public class Type1AgentBDI implements MarketAgentService  {
 
         return null;
     }
-    
+
 
     //alterar aqui
     @Plan(trigger=@Trigger(factchangeds="updatedstock"))
@@ -212,7 +212,6 @@ public void decisionFunc(){
         SServiceProvider.getService(agent, AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM)
                 .addResultListener(new DefaultResultListener<AgentRequestService>() {
                     public void resultAvailable(AgentRequestService service) {
-                        System.out.println("oi");
                         service.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price);
                     }
                 });
@@ -223,14 +222,13 @@ public void decisionFunc(){
         SServiceProvider.getService(agent, AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM)
                 .addResultListener(new DefaultResultListener<AgentRequestService>() {
                     public void resultAvailable(AgentRequestService service) {
-                        System.out.println("oi");
                         service.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price);
                     }
                 });
     }
 
     public IFuture<Void> ConfirmStockBuy(IComponentIdentifier agentid, String stockname, int quantity, double price) {
-        System.out.println("confirma");
+
         if(agentid == this.agent.getComponentIdentifier()) { //confirmaçao do mercado
             if(money >= quantity*price){
 
@@ -245,7 +243,7 @@ public void decisionFunc(){
                     stocksOwned.put(stockname,quantity);
                 }
 
-                System.out.println("random agent comprou stock: "+ stockname + ": " + quantity);
+                System.out.println("type1 agent comprou stock: "+ stockname + ": " + quantity);
 
             }else{
                 //nao tem guito para comprar
@@ -258,7 +256,6 @@ public void decisionFunc(){
     }
 
     public IFuture<Void> ConfirmStockSell(IComponentIdentifier agentid, String stockname, int quantity, double price) {
-        System.out.println("ndef");
         if(stocksOwned.get(stockname)-quantity <= 0) {
             stocksOwned.remove(stockname);
         }else{

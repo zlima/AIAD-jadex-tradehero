@@ -11,6 +11,7 @@ import jadex.commons.future.DefaultResultListener;
 import jadex.commons.future.IFuture;
 import jadex.micro.annotation.*;
 import jadex.rules.eca.ChangeInfo;
+import org.apache.batik.bridge.Mark;
 import tutorial.Services.AgentRequestService;
 import tutorial.Services.MarketAgentService;
 import yahoofinance.Stock;
@@ -40,6 +41,8 @@ public class MarketAgentBDI implements AgentRequestService {
     @Belief
     private int dayspassed;
 
+    private int dayspassedaux;
+
     @Belief
     private String[] symbols = new String[] {"INTC", "BABA"/*, "TSLA", "YHOO", "GOOG"*/};
 
@@ -58,6 +61,7 @@ public class MarketAgentBDI implements AgentRequestService {
     @AgentCreated
     private void init(){
         dayspassed = 0;
+        dayspassedaux=0;
         try {
             getStocksHist();
         } catch (IOException e) {
@@ -78,14 +82,16 @@ public class MarketAgentBDI implements AgentRequestService {
             return; //chegou ao fim dos dias
 
         for(int i = 0; i < symbols.length; i++){
-            Market.get(symbols[i]).add(stockHist.get(symbols[i]).get(dayspassed));
+            Market.get(symbols[i]).add(stockHist.get(symbols[i]).get(dayspassedaux));
         }
+        dayspassedaux++;
 
         if(openstatus){
             openstatus = !openstatus;
         }
         else {
             openstatus = !openstatus;
+
         }
     }
 
@@ -184,7 +190,6 @@ public class MarketAgentBDI implements AgentRequestService {
     }
 
     public IFuture<Void> SellStockRequest(IComponentIdentifier agentid, String stockname, int quantity, double price) {
-        System.out.println("ooooooooooooooooooooooooooooooooooooooooooooo");
         if(!openstatus) {
             if (Market.get(stockname).get(dayspassed).getOpen().doubleValue() == price) {
                 System.out.print("Valor 1: ");
