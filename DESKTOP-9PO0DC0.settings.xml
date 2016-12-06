@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<p0:properties xmlns:p0="http://www.activecomponents.org/jadex-conf" __ID="0">
+	<p0:properties __ID="1" type="awa@DESKTOP-9PO0DC0_ac5">
+		<p0:property __ID="2" type="fast">false</p0:property>
+		<p0:property __ID="3" type="autocreate">true</p0:property>
+		<p0:property __ID="4" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="5" type="StarterServicePanel">
+		<p0:properties __ID="6" type="mpanel">
+			<p0:property __ID="7" type="tree"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<p0:TreeProperties xmlns:p0="typeinfo:jadex.base.gui.filetree" __ID="0">
+	<expandedNodes>
+		<p0:NodePath__1 __ID="1" __len="2">
+			<entries>
+				<p0:NodePath __ID="2" entry="0">
+					<path>
+						<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="3" __len="0"></p1:String__1>
+					</path>
+				</p0:NodePath>
+				<p0:NodePath __ID="4" entry="0">
+					<path>
+						<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="5" __len="1">
+							<entries>
+								<p1:String __ID="6">Agents</p1:String>
+							</entries>
+						</p1:String__1>
+					</path>
+				</p0:NodePath>
+			</entries>
+		</p0:NodePath__1>
+	</expandedNodes>
+	<selectedNode>
+		<p0:NodePath __ID="7" entry="0">
+			<path>
+				<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="8" __len="2">
+					<entries>
+						<p1:String __ID="9">Agents</p1:String>
+						<p1:String __ID="10">RandomAgentBDI.class</p1:String>
+					</entries>
+				</p1:String__1>
+			</path>
+		</p0:NodePath>
+	</selectedNode>
+	<rootPathEntries>
+		<p1:String__1 xmlns:p1="typeinfo:java.lang" __ID="11" __len="1">
+			<entries>
+				<p1:String __ID="12">target\classes\tutorial</p1:String>
+			</entries>
+		</p1:String__1>
+	</rootPathEntries>
+</p0:TreeProperties>
+]]></p0:property>
+			<p0:properties __ID="8" type="mic">
+				<p0:property __ID="9" type="Micro Agent">true</p0:property>
+				<p0:property __ID="10" type="BPMN Legacy Process">true</p0:property>
+				<p0:property __ID="11" type="BDIV3 Agent">true</p0:property>
+				<p0:property __ID="12" type="Component">true</p0:property>
+				<p0:property __ID="13" type="BPMN Process">true</p0:property>
+			</p0:properties>
+		</p0:properties>
+		<p0:properties __ID="14" type="spanel">
+			<p0:property __ID="15" type="model">target\classes\tutorial\Agents\RandomAgentBDI.class</p0:property>
+			<p0:property __ID="16" type="ridurl">file:target/classes/tutorial</p0:property>
+			<p0:property __ID="17" type="globalrid"></p0:property>
+			<p0:property __ID="18" type="startsuspended">false</p0:property>
+			<p0:property __ID="19" type="autogenerate">false</p0:property>
+			<p0:property __ID="20" type="number">1</p0:property>
+			<p0:property __ID="21" type="name">RandomAgent</p0:property>
+		</p0:properties>
+	</p0:properties>
+	<p0:properties __ID="22" type="clockservice">
+		<p0:property __ID="23" type="type">system</p0:property>
+		<p0:property __ID="24" type="delta">100</p0:property>
+		<p0:property __ID="25" type="dilation">1.0</p0:property>
+	</p0:properties>
+	<p0:properties __ID="26" type="simulationservice">
+		<p0:property __ID="27" type="executing">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="28" type="chat">
+		<p0:property __ID="29" type="nickname">user_07c</p0:property>
+	</p0:properties>
+	<p0:properties __ID="30" type="awa@DESKTOP-9PO0DC0_551">
+		<p0:property __ID="31" type="fast">false</p0:property>
+		<p0:property __ID="32" type="autocreate">true</p0:property>
+		<p0:property __ID="33" type="autodelete">true</p0:property>
+	</p0:properties>
+	<p0:properties __ID="34" type="securityservice">
+		<p0:property __ID="35" type="validityduration">327680</p0:property>
+		<p0:property __ID="36" type="usepass">true</p0:property>
+		<p0:property __ID="37" type="password">bcf560c6-864</p0:property>
+		<p0:property __ID="38" type="selected_mechanism">0</p0:property>
+		<p0:property __ID="39" type="trustedlan">false</p0:property>
+		<p0:property __ID="40" type="storepath">./keystore</p0:property>
+		<p0:property __ID="41" type="storepass">keystore</p0:property>
+		<p0:property __ID="42" type="keypass">keystore</p0:property>
+		<p0:property __ID="43" type="selmech">0</p0:property>
+		<p0:properties __ID="44" type="DecentralizedAcquisitionMechanism">
+			<p0:property __ID="45" type="responses">1</p0:property>
+		</p0:properties>
+		<p0:properties __ID="46" type="TTPAcquisitionMechanism">
+			<p0:property __ID="47" type="verify">true</p0:property>
+		</p0:properties>
+	</p0:properties>
+</p0:properties>

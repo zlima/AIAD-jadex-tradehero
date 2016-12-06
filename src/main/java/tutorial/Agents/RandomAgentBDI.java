@@ -12,6 +12,7 @@ import jadex.commons.future.IFuture;
 import jadex.micro.annotation.*;
 import tutorial.Services.AgentRequestService;
 import tutorial.Services.MarketAgentService;
+import tutorial.Services.AgentChatService;
 import yahoofinance.histquotes.HistoricalQuote;
 
 import java.util.*;
@@ -23,8 +24,9 @@ import java.util.*;
 @Agent
 @Service
 @ProvidedServices(@ProvidedService(type=MarketAgentService.class))
+@RequiredServices(@RequiredService(name="AgentChat", type=AgentChatService.class))
 @Description("random agent")
-public class RandomAgentBDI implements MarketAgentService {
+public class RandomAgentBDI implements MarketAgentService, AgentChatService {
 
     private double money; //dinheiro do agent
     private double winrate;
@@ -33,6 +35,12 @@ public class RandomAgentBDI implements MarketAgentService {
 
     @Belief
     private Map<String,List<HistoricalQuote>> Market;
+
+    @Belief
+    private ArrayList<Integer> followers;
+
+    @Belief
+    private ArrayList<Integer> following;
 
     @Belief(updaterate=1000)
     protected long time = System.currentTimeMillis();
@@ -56,6 +64,8 @@ public class RandomAgentBDI implements MarketAgentService {
         money = 400000;
         stockValues = new ArrayList<ArrayList<HashMap>>();
         stockHist = new HashMap<String, Integer>();
+        //followers = new ArrayList<Integer>();
+        //following = new ArrayList<Integer>();
     }
 
     @AgentBody
@@ -123,8 +133,6 @@ public class RandomAgentBDI implements MarketAgentService {
         return null;
     }
 
-
-
     @Plan(trigger=@Trigger(factchangeds="updatedstock"))
     public void newStockvalues(){
         Random rand = new Random();
@@ -152,58 +160,94 @@ public class RandomAgentBDI implements MarketAgentService {
             System.out.println("ignora, sem stocks");
             return;
         }
+        final String[] symbol = new String[1];
+        final int[] rand2 = new int[1];
+        final int[] j = new int[1];
         SServiceProvider.getService(agent, AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM)
                 .addResultListener(new DefaultResultListener<AgentRequestService>() {
                     public void resultAvailable(AgentRequestService service) {
                         Random rand = new Random();
                         int n = rand.nextInt(stocksOwned.size());
                         Object[] value2 = stocksOwned.keySet().toArray();
-                        String symbol = (String) value2[n];
-                        int rand2 = rand.nextInt(stocksOwned.get(symbol)+1);
+                        symbol[0] = (String) value2[n];
+                        rand2[0] = rand.nextInt(stocksOwned.get(symbol[0])+1);
 
-                        int j = 0;
+                        j[0] = 0;
                         for(int i = 0; i < stockValues.size(); i++){
                             ArrayList<HashMap> temp = stockValues.get(i);
-                            for(j = 0; j < temp.size(); j++){
-                                if(symbol == temp.get(j).get("Symbol"))
+                            for(j[0] = 0; j[0] < temp.size(); j[0]++){
+                                if(symbol[0] == temp.get(j[0]).get("Symbol"))
                                     break;
                             }
                         }
 
                         if (stockValues.get(stockValues.size() - 1).get(0).size() > 2) {
-                            service.SellStockRequest(agent.getComponentIdentifier(), symbol
-                                    , rand2,(Double) stockValues.get(stockValues.size() - 1).get(j).get("Close") );
+                            service.SellStockRequest(agent.getComponentIdentifier(), symbol[0]
+                                    , rand2[0],(Double) stockValues.get(stockValues.size() - 1).get(j[0]).get("Close") );
                         }else{
-                            service.SellStockRequest(agent.getComponentIdentifier(), symbol
-                                    , rand2,(Double) stockValues.get(stockValues.size() - 1).get(j).get("Open") );
+                            service.SellStockRequest(agent.getComponentIdentifier(), symbol[0]
+                                    , rand2[0],(Double) stockValues.get(stockValues.size() - 1).get(j[0]).get("Open") );
                         }
                     }
                 });
-                }
+        SServiceProvider.getService(agent, AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM)
+                .addResultListener(new DefaultResultListener<AgentChatService>() {
+                    public void resultAvailable(AgentChatService service) {
+                        service.SellStockMessage(agent.getComponentIdentifier(), symbol[0]
+                                , rand2[0],(Double) stockValues.get(stockValues.size() - 1).get(j[0]).get("Open"));
+                    }
+                });
+    }
 
 
     private void buyStock(){
+        final int[] n = new int[1];
+        final int[] rand2 = new int[1];
             SServiceProvider.getService(agent, AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM)
                     .addResultListener(new DefaultResultListener<AgentRequestService>() {
                         public void resultAvailable(AgentRequestService service) {
                             Random rand = new Random();
-                            int n = rand.nextInt(stockValues.get(stockValues.size() - 1).size());//escolher uma stock para comprar
+                            n[0] = rand.nextInt(stockValues.get(stockValues.size() - 1).size());//escolher uma stock para comprar
 
-                            if (stockValues.get(stockValues.size() - 1).get(n).size() > 2) {//close
+                            if (stockValues.get(stockValues.size() - 1).get(n[0]).size() > 2) {//close
 
-                                double test = money / (Double) stockValues.get(stockValues.size() - 1).get(n).get("Close");
-                                int rand2 = rand.nextInt((int) test);
-                                service.BuyStocksRequest(agent.getComponentIdentifier(), (String) stockValues.get(stockValues.size() - 1).get(n).get("Symbol"), rand2,
-                                        (Double) stockValues.get(stockValues.size() - 1).get(n).get("Close"));
+                                double test = money / (Double) stockValues.get(stockValues.size() - 1).get(n[0]).get("Close");
+                                rand2[0] = rand.nextInt((int) test);
+                                service.BuyStocksRequest(agent.getComponentIdentifier(), (String) stockValues.get(stockValues.size() - 1).get(n[0]).get("Symbol"), rand2[0],
+                                        (Double) stockValues.get(stockValues.size() - 1).get(n[0]).get("Close"));
                             } else {
-                                double test = money / (Double) stockValues.get(stockValues.size() - 1).get(n).get("Open");
-                                int rand2 = rand.nextInt((int) test);
-                                service.BuyStocksRequest(agent.getComponentIdentifier(), (String) stockValues.get(stockValues.size() - 1).get(n).get("Symbol"), rand2,
-                                        (Double) stockValues.get(stockValues.size() - 1).get(n).get("Open"));
+                                double test = money / (Double) stockValues.get(stockValues.size() - 1).get(n[0]).get("Open");
+                                rand2[0] = rand.nextInt((int) test);
+                                service.BuyStocksRequest(agent.getComponentIdentifier(), (String) stockValues.get(stockValues.size() - 1).get(n[0]).get("Symbol"), rand2[0],
+                                        (Double) stockValues.get(stockValues.size() - 1).get(n[0]).get("Open"));
                             }
                         }
                         });
+            SServiceProvider.getService(agent, AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM)
+                .addResultListener(new DefaultResultListener<AgentChatService>() {
+                    public void resultAvailable(AgentChatService service) {
+                        service.BuyStockMessage(agent.getComponentIdentifier(), (String) stockValues.get(stockValues.size() - 1).get(n[0]).get("Symbol"), rand2[0],
+                                (Double) stockValues.get(stockValues.size() - 1).get(n[0]).get("Open"));
+                    }
+                });
         }
 
+    public IFuture<Void> BuyStockMessage(IComponentIdentifier agentid, String stockname, int quantity, double price) {
+        if(agentid == agent.getComponentIdentifier())
+            System.out.println("Leu o proprio");
+        else{
+            System.out.println("print varios");
+            System.out.println("O agente " + agentid + " comprou " + quantity + " stocks de " + stockname);
+        }
+        return null;
+    }
 
+    public IFuture<Void> SellStockMessage(IComponentIdentifier agentid, String stockname, int quantity, double price) {
+        if(agentid == agent.getComponentIdentifier())
+            System.out.println("Leu o proprio");
+        else{
+            System.out.println("O agente " + agentid + " vendeu " + quantity + " stocks de " + stockname);
+        }
+        return null;
+    }
 }
