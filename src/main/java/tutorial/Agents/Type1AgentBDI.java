@@ -11,6 +11,7 @@ import jadex.bridge.service.annotation.Service;
 import jadex.bridge.service.search.SServiceProvider;
 import jadex.commons.future.DefaultResultListener;
 import jadex.commons.future.IFuture;
+import jadex.commons.future.IntermediateDefaultResultListener;
 import jadex.micro.annotation.*;
 import org.apache.batik.bridge.Mark;
 import org.apache.batik.gvt.Marker;
@@ -84,6 +85,7 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JFrame f = new JFrame();
+                f.setTitle(agent.getComponentIdentifier().getName());
                 f.setContentPane(GUI.panel1);
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 f.pack();
@@ -229,20 +231,18 @@ public void decisionFunc(){
 
     private void buyStock(final String name, final double price, final int numsShares){
 
-        SServiceProvider.getService(agent, AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM)
-                .addResultListener(new DefaultResultListener<AgentRequestService>() {
-                    public void resultAvailable(AgentRequestService service) {
-                        service.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price);
+        SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
+            public void intermediateResultAvailable(AgentRequestService is) {
+                        is.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price);
                     }
                 });
     }
 
     private void sellStock(final String name, final double price, final int numsShares){
 
-        SServiceProvider.getService(agent, AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM)
-                .addResultListener(new DefaultResultListener<AgentRequestService>() {
-                    public void resultAvailable(AgentRequestService service) {
-                        service.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price);
+        SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
+            public void intermediateResultAvailable(AgentRequestService is) {
+                        is.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price);
                     }
                 });
     }

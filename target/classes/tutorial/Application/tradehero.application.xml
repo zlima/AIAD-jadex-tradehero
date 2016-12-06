@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<applicationtype xmlns="http://jadex.sourceforge.net/jadex"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://jadex.sourceforge.net/jadex
+	                    http://jadex.sourceforge.net/jadex-application-2.5.xsd"
+                 name="EnglishAuction" package="application"
+                 autoshutdown="true">
+
+
+    <componenttypes>
+
+    </componenttypes>
+
+    <properties>
+
+    </properties>
+
+    <configurations>
+
+        <configuration name="Original">
+
+            <components>
+
+            </components>
+
+        </configuration>
+
+    </configurations>
+
+</applicationtype>
