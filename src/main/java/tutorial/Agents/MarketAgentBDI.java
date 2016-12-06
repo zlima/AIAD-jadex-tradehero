@@ -52,12 +52,12 @@ public class MarketAgentBDI implements AgentRequestService {
     private int dayspassedaux;
 
     @Belief
-    private String[] symbols = new String[] {"INTC", "BABA"/*, "TSLA", "YHOO", "GOOG"*/};
+    private String[] symbols = new String[] {"INTC", "BABA", "TSLA", "YHOO", "GOOG"};
 
     @Belief
     private Map<String,List<HistoricalQuote>> Market;
 
-    @Belief(updaterate = 5000)
+    @Belief(updaterate = 1000)
     protected long time = System.currentTimeMillis();
 
     @AgentFeature
