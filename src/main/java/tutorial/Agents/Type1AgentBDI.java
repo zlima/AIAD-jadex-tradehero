@@ -15,10 +15,12 @@ import jadex.micro.annotation.*;
 import org.apache.batik.bridge.Mark;
 import org.apache.batik.gvt.Marker;
 import tutorial.Services.AgentChatService;
+import tutorial.GUI.TraderGUI;
 import tutorial.Services.AgentRequestService;
 import tutorial.Services.MarketAgentService;
 import yahoofinance.histquotes.HistoricalQuote;
 
+import javax.swing.*;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -55,9 +57,12 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
     @Agent
     IInternalAccess agent;
 
+
     protected ArrayList<ArrayList<HashMap>> stockValues;
 
     protected HashMap<String,double[]> recordVariationMap;
+
+    private TraderGUI GUI;
 
 
     @AgentCreated
@@ -69,12 +74,23 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
         stockValues = new ArrayList<ArrayList<HashMap>>();
         stockHist = new HashMap<String, Integer>();
         recordVariationMap = new HashMap<String, double[]>();
+        GUI = new TraderGUI();
     }
 
     @AgentBody
     private void body(){
 
 
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JFrame f = new JFrame();
+                f.setContentPane(GUI.panel1);
+                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                f.pack();
+                GUI.saldoGUI.setText(String.valueOf(money));
+                f.setVisible(true);
+            }
+        });
 
     }
 
@@ -255,6 +271,7 @@ public void decisionFunc(){
                         });
 
                 System.out.println("type1 agent comprou stock: "+ stockname + ": " + quantity);
+                updateGUI();
                 System.out.println(stocksOwned);
 
             }else{
@@ -287,6 +304,7 @@ public void decisionFunc(){
                 });
 
         System.out.println("Agent type1 vendeu saldo: "+ money);
+        updateGUI();
         System.out.println(stocksOwned);
 
         return null;
@@ -314,4 +332,28 @@ public void decisionFunc(){
         }
         return null;
     }
+    
+    
+    public double calcMoney(){
+        double moneyaux=0;
+
+        for (Map.Entry<String, Integer> pair : stocksOwned.entrySet()) {
+            moneyaux += pair.getValue() * searchStockPrice(pair.getKey());
+
+        }
+        return moneyaux+money;
+    }
+
+    public void updateGUI(){
+        DefaultListModel listModel = new DefaultListModel();
+        GUI.saldoGUI.setText(String.valueOf(money));
+        for (Map.Entry<String, Integer> pair : stocksOwned.entrySet()) {
+            listModel.addElement(pair.getKey() + " : " + pair.getValue());
+        }
+
+        GUI.stocksGUI.setModel(listModel);
+
+        GUI.carteiraGUI.setText(String.valueOf(calcMoney()));
+    }
+
 }
