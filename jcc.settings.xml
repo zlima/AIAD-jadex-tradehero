@@ -23,14 +23,14 @@
 		</p0:properties>
 	</p0:properties>
 	<p0:properties __ID="16" type="vis">
-		<p0:property __ID="17" type="Starter" name="jadex.tools.starter.StarterPlugin">true</p0:property>
-		<p0:property __ID="18" type="Chat" name="jadex.tools.chat.ChatPlugin">true</p0:property>
-		<p0:property __ID="19" type="Test Center" name="jadex.tools.testcenter.TestCenterPlugin">true</p0:property>
-		<p0:property __ID="20" type="ISimulationService" name="jadex.tools.simcenter.SimulationServicePlugin">true</p0:property>
-		<p0:property __ID="21" type="Debugger" name="jadex.tools.debugger.DebuggerPlugin">true</p0:property>
-		<p0:property __ID="22" type="IAwarenessManagementService" name="jadex.tools.awareness.AwarenessServicePlugin">true</p0:property>
-		<p0:property __ID="23" type="Component Viewer" name="jadex.base.gui.componentviewer.ComponentViewerPlugin">true</p0:property>
-		<p0:property __ID="24" type="ISecurityService" name="jadex.tools.security.SecurityServicePlugin">true</p0:property>
+		<p0:property __ID="17" name="jadex.tools.starter.StarterPlugin" type="Starter">true</p0:property>
+		<p0:property __ID="18" name="jadex.tools.chat.ChatPlugin" type="Chat">true</p0:property>
+		<p0:property __ID="19" name="jadex.tools.testcenter.TestCenterPlugin" type="Test Center">true</p0:property>
+		<p0:property __ID="20" name="jadex.tools.simcenter.SimulationServicePlugin" type="ISimulationService">true</p0:property>
+		<p0:property __ID="21" name="jadex.tools.debugger.DebuggerPlugin" type="Debugger">true</p0:property>
+		<p0:property __ID="22" name="jadex.tools.awareness.AwarenessServicePlugin" type="IAwarenessManagementService">true</p0:property>
+		<p0:property __ID="23" name="jadex.base.gui.componentviewer.ComponentViewerPlugin" type="Component Viewer">true</p0:property>
+		<p0:property __ID="24" name="jadex.tools.security.SecurityServicePlugin" type="ISecurityService">true</p0:property>
 	</p0:properties>
 	<p0:properties __ID="25" type="controlcenter">
 		<p0:property __ID="26" type="perspective">Starter</p0:property>
@@ -51,7 +51,7 @@
 				<p1:String xmlns:p1="typeinfo:java.lang" __ID="5">Starter.console.height</p1:String>
 			</key>
 			<value>
-				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="6" content="1.0"></p1:Double>
+				<p1:Double xmlns:p1="typeinfo:java.lang" __ID="6" content="0.9980916030534351"></p1:Double>
 			</value>
 		</entry>
 		<entry __ID="7">
@@ -100,7 +100,7 @@
 	</p0:properties>
 	<p0:properties __ID="29" type="Starter">
 		<p0:property __ID="30" type="leftsplit_location">0.7</p0:property>
-		<p0:property __ID="31" type="mainsplit_location">0.29935622317596566</p0:property>
+		<p0:property __ID="31" type="mainsplit_location">0.3197424892703863</p0:property>
 	</p0:properties>
 	<p0:properties __ID="32" type="Chat">
 		<p0:properties __ID="33" type="panelproperties">
@@ -111,8 +111,8 @@
 	<p0:properties __ID="36" type="window">
 		<p0:property __ID="37" type="width">960</p0:property>
 		<p0:property __ID="38" type="height">650</p0:property>
-		<p0:property __ID="39" type="x">426</p0:property>
-		<p0:property __ID="40" type="y">78</p0:property>
+		<p0:property __ID="39" type="x">545</p0:property>
+		<p0:property __ID="40" type="y">80</p0:property>
 		<p0:property __ID="41" type="extendedState">0</p0:property>
 		<p0:property __ID="42" type="jccexit">ask</p0:property>
 		<p0:property __ID="43" type="saveonexit">true</p0:property>

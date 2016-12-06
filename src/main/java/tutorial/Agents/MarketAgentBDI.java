@@ -9,6 +9,7 @@ import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.search.SServiceProvider;
 import jadex.commons.future.DefaultResultListener;
 import jadex.commons.future.IFuture;
+import jadex.commons.future.IntermediateDefaultResultListener;
 import jadex.commons.gui.PropertiesPanel;
 import jadex.commons.gui.SGUI;
 import jadex.micro.annotation.*;
@@ -92,6 +93,7 @@ public class MarketAgentBDI implements AgentRequestService {
             public void run() {
                 JFrame f = new JFrame();
                 f.setContentPane(GUI.panelMain);
+                f.setTitle("Market Agent");
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 f.pack();
                 f.setVisible(true);
@@ -170,13 +172,19 @@ public class MarketAgentBDI implements AgentRequestService {
 
     @Plan(trigger=@Trigger(factchangeds = "openstatus"))
     public IFuture<Void> UpdateMarketService() {
-        SServiceProvider.getService(agent, MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM)
+    /*    SServiceProvider.getService(agent, MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM)
                 .addResultListener(new DefaultResultListener<MarketAgentService>() {
                     public void resultAvailable(MarketAgentService service) {
-                        System.out.println(sendMarketVal);
                         sendLastMarketValues(service,sendMarketVal);
                     }
-                });
+                });*/
+
+        SServiceProvider.getServices(agent.getServiceProvider(), MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<MarketAgentService>() {
+            public void intermediateResultAvailable(MarketAgentService is) {
+                is.UpdateMarketService(sendMarketVal);
+            }
+        });
+
         return null;
     }
 
@@ -204,12 +212,18 @@ public class MarketAgentBDI implements AgentRequestService {
     }
 
     public IFuture<Void> ConfirmStockBuy(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price){
-        SServiceProvider.getService(agent, MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM)
+       /* SServiceProvider.getService(agent, MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM)
                 .addResultListener(new DefaultResultListener<MarketAgentService>() {
                     public void resultAvailable(MarketAgentService service) {
                         service.ConfirmStockBuy(agentid, stockname, quantity, price);
                     }
-                });
+                });*/
+
+        SServiceProvider.getServices(agent.getServiceProvider(), MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<MarketAgentService>() {
+            public void intermediateResultAvailable(MarketAgentService is) {
+                is.ConfirmStockBuy(agentid, stockname, quantity, price);
+            }
+        });
         return null;
     }
 
@@ -258,13 +272,19 @@ public class MarketAgentBDI implements AgentRequestService {
     }
 
     public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price){
-        SServiceProvider.getService(agent, MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM)
+       /* SServiceProvider.getService(agent, MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM)
                 .addResultListener(new DefaultResultListener<MarketAgentService>() {
                     public void resultAvailable(MarketAgentService service) {
                         //System.out.println("Envio de mensagem de venda");
                         service.ConfirmStockSell(agentid, stockname, quantity, price);
                     }
-                });
+                });*/
+        SServiceProvider.getServices(agent.getServiceProvider(), MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<MarketAgentService>() {
+            public void intermediateResultAvailable(MarketAgentService is) {
+                is.ConfirmStockSell(agentid, stockname, quantity, price);
+            }
+        });
+
         return null;
     }
 }
