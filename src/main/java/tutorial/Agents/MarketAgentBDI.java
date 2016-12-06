@@ -9,6 +9,8 @@ import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.search.SServiceProvider;
 import jadex.commons.future.DefaultResultListener;
 import jadex.commons.future.IFuture;
+import jadex.commons.gui.PropertiesPanel;
+import jadex.commons.gui.SGUI;
 import jadex.micro.annotation.*;
 import jadex.rules.eca.ChangeInfo;
 import org.apache.batik.bridge.Mark;
@@ -19,8 +21,13 @@ import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.HistoricalQuote;
 import yahoofinance.histquotes.Interval;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
+
+import tutorial.GUI.markerGUI;
 
 /**
  * Created by Cenas on 10/13/2016.
@@ -34,6 +41,7 @@ public class MarketAgentBDI implements AgentRequestService {
     private Map<String,List<HistoricalQuote>> stockHist;
     private MarketAgentService serviço;
     private int days;
+    private ArrayList<HashMap> sendMarketVal;
 
     @Belief
     private boolean openstatus;
@@ -49,7 +57,7 @@ public class MarketAgentBDI implements AgentRequestService {
     @Belief
     private Map<String,List<HistoricalQuote>> Market;
 
-    @Belief(updaterate = 3000)
+    @Belief(updaterate = 5000)
     protected long time = System.currentTimeMillis();
 
     @AgentFeature
@@ -58,8 +66,11 @@ public class MarketAgentBDI implements AgentRequestService {
     @Agent
     IInternalAccess agent;
 
+    public markerGUI GUI;
+
     @AgentCreated
     private void init(){
+        GUI = new markerGUI();
         dayspassed = 0;
         dayspassedaux=0;
         try {
@@ -74,7 +85,18 @@ public class MarketAgentBDI implements AgentRequestService {
 
     @AgentBody
     private void body(){
+
         bdiFeature.adoptPlan("updateMarketPlan");
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JFrame f = new JFrame();
+                f.setContentPane(GUI.panelMain);
+                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                f.pack();
+                f.setVisible(true);
+            }
+        });
     }
 
     public void updateMarket(){
@@ -82,15 +104,35 @@ public class MarketAgentBDI implements AgentRequestService {
             return; //chegou ao fim dos dias
 
         for(int i = 0; i < symbols.length; i++){
-            Market.get(symbols[i]).add(stockHist.get(symbols[i]).get(dayspassedaux));
+            Market.get(symbols[i]).add(stockHist.get(symbols[i]).get(days));
         }
-        dayspassedaux++;
+        sendMarketVal = new ArrayList<HashMap>();
+        createLastQuoteHash(sendMarketVal);
 
         if(openstatus){
+
+            DefaultListModel listModel = new DefaultListModel();
+            for(int i=0;i<symbols.length;i++){
+                listModel.addElement(Market.get(symbols[i]).get(Market.get(symbols[i]).size()-1).getSymbol() + " : " + Market.get(symbols[i]).get(Market.get(symbols[i]).size()-1).getOpen().doubleValue());
+            }
+
+            GUI.stockValuesGUI.setModel(listModel);
+
             openstatus = !openstatus;
         }
         else {
+            DefaultListModel listModel = new DefaultListModel();
+            for(int i=0;i<symbols.length;i++){
+                listModel.addElement(Market.get(symbols[i]).get(Market.get(symbols[i]).size()-1).getSymbol() + " : " + Market.get(symbols[i]).get(Market.get(symbols[i]).size()-1).getClose().doubleValue());
+            }
+
+            GUI.stockValuesGUI.setModel(listModel);
+
             openstatus = !openstatus;
+
+                days--;
+                dayspassed++;
+
 
         }
     }
@@ -131,13 +173,8 @@ public class MarketAgentBDI implements AgentRequestService {
         SServiceProvider.getService(agent, MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM)
                 .addResultListener(new DefaultResultListener<MarketAgentService>() {
                     public void resultAvailable(MarketAgentService service) {
-                        ArrayList<HashMap> sendMarketVal = new ArrayList<HashMap>();
-                        createLastQuoteHash(sendMarketVal);
+                        System.out.println(sendMarketVal);
                         sendLastMarketValues(service,sendMarketVal);
-                        if(!openstatus){
-                            days--;
-                            dayspassed++;
-                        }
                     }
                 });
         return null;
@@ -149,13 +186,13 @@ public class MarketAgentBDI implements AgentRequestService {
             HashMap temp = new HashMap();
             temp.put("Symbol", symbols[i]);
 
-            if(!openstatus)
-                temp.put("Open", Market.get(symbols[i]).get(dayspassed).getOpen().doubleValue());
+            if(openstatus)
+                temp.put("Open", Market.get(symbols[i]).get(Market.get(symbols[i]).size()-1).getOpen().doubleValue());
             else{
-                temp.put("Close", Market.get(symbols[i]).get(dayspassed).getClose().doubleValue());
-                temp.put("High", Market.get(symbols[i]).get(dayspassed).getHigh().doubleValue());
-                temp.put("Low", Market.get(symbols[i]).get(dayspassed).getLow().doubleValue());
-                temp.put("Volume", Market.get(symbols[i]).get(dayspassed).getVolume().intValue());
+                temp.put("Close", Market.get(symbols[i]).get(Market.get(symbols[i]).size()-1).getClose().doubleValue());
+                temp.put("High", Market.get(symbols[i]).get(Market.get(symbols[i]).size()-1).getHigh().doubleValue());
+                temp.put("Low", Market.get(symbols[i]).get(Market.get(symbols[i]).size()-1).getLow().doubleValue());
+                temp.put("Volume", Market.get(symbols[i]).get(Market.get(symbols[i]).size()-1).getVolume().intValue());
 
             }
             quote.add(temp);
@@ -179,37 +216,39 @@ public class MarketAgentBDI implements AgentRequestService {
     public IFuture<Void> BuyStocksRequest(IComponentIdentifier agentid, String stockname, int quantity, double price) {
 
         if(!openstatus) {
-            if (Market.get(stockname).get(dayspassed).getOpen().doubleValue() == price)
+            if (Market.get(stockname).get(Market.get(stockname).size()-1).getOpen().doubleValue() == price) {
                 ConfirmStockBuy(agentid, stockname, quantity, price);
+            }
         }
         else{
-            if (Market.get(stockname).get(dayspassed).getClose().doubleValue() == price)
+            if (Market.get(stockname).get(Market.get(stockname).size()-2).getClose().doubleValue() == price) {
                 ConfirmStockBuy(agentid, stockname, quantity, price);
+            }
         }
         return null;
     }
 
     public IFuture<Void> SellStockRequest(IComponentIdentifier agentid, String stockname, int quantity, double price) {
         if(!openstatus) {
-            if (Market.get(stockname).get(dayspassed).getOpen().doubleValue() == price) {
-                System.out.print("Valor 1: ");
+            if (Market.get(stockname).get(Market.get(stockname).size()-1).getOpen().doubleValue() == price) {
+                /*System.out.print("Valor 1: ");
                 System.out.println(Market.get(stockname).get(dayspassed).getOpen().doubleValue());
                 System.out.print("Valor 2: ");
-                System.out.println(price);
+                System.out.println(price);*/
                 ConfirmStockSell(agentid, stockname, quantity, price);
             }
             else {
-                System.out.print("Valor 1: ");
+               /* System.out.print("Valor 1: ");
                 System.out.println(Market.get(stockname).get(dayspassed).getOpen().doubleValue());
                 System.out.print("Valor 1 close: ");
                 System.out.println(Market.get(stockname).get(dayspassed).getClose().doubleValue());
                 System.out.print("Valor 2: ");
-                System.out.println(price);
+                System.out.println(price);*/
                 System.out.println("Demoraste muito a vender!");
             }
         }
         else{
-            if (Market.get(stockname).get(dayspassed).getClose().doubleValue() == price)
+            if (Market.get(stockname).get(Market.get(stockname).size()-2).getClose().doubleValue() == price)
                 ConfirmStockSell(agentid, stockname, quantity, price);
             else
                 System.out.println("Demoraste muito a vender!2");
@@ -222,7 +261,7 @@ public class MarketAgentBDI implements AgentRequestService {
         SServiceProvider.getService(agent, MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM)
                 .addResultListener(new DefaultResultListener<MarketAgentService>() {
                     public void resultAvailable(MarketAgentService service) {
-                        System.out.println("Envio de mensagem de venda");
+                        //System.out.println("Envio de mensagem de venda");
                         service.ConfirmStockSell(agentid, stockname, quantity, price);
                     }
                 });

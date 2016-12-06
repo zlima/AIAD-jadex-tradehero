@@ -173,8 +173,8 @@ public class Type1AgentBDI implements MarketAgentService  {
 
             }
         }
-        System.out.println(recordVariationMap.get("BABA")[0] +" ," +
-                " "+recordVariationMap.get("INTC")[0]);
+        //System.out.println(recordVariationMap.get("BABA")[0] +" ," +
+        //        " "+recordVariationMap.get("INTC")[0]);
 
     }
 
@@ -244,6 +244,7 @@ public void decisionFunc(){
                 }
 
                 System.out.println("type1 agent comprou stock: "+ stockname + ": " + quantity);
+                System.out.println(stocksOwned);
 
             }else{
                 //nao tem guito para comprar
@@ -251,7 +252,7 @@ public void decisionFunc(){
             }
 
         }
-        System.out.println(stocksOwned);
+
         return null;
     }
 
@@ -266,8 +267,9 @@ public void decisionFunc(){
 
         money += quantity*price;
 
-        System.out.println("vendeu   saldo: "+money);
 
+        System.out.println("Agent type1 vendeu saldo: "+ money);
+        System.out.println(stocksOwned);
 
         return null;
     }
