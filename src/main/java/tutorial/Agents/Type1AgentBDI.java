@@ -14,6 +14,7 @@ import jadex.commons.future.IFuture;
 import jadex.micro.annotation.*;
 import org.apache.batik.bridge.Mark;
 import org.apache.batik.gvt.Marker;
+import tutorial.Services.AgentChatService;
 import tutorial.Services.AgentRequestService;
 import tutorial.Services.MarketAgentService;
 import yahoofinance.histquotes.HistoricalQuote;
@@ -27,9 +28,12 @@ import java.util.*;
 
 @Agent
 @Service
-@ProvidedServices(@ProvidedService(type=MarketAgentService.class))
+@ProvidedServices({
+        @ProvidedService(type=MarketAgentService.class),
+        @ProvidedService(type=AgentChatService.class)
+})
 @Description("agent type 1")
-public class Type1AgentBDI implements MarketAgentService  {
+public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
 
     private double money; //dinheiro do agent
     private double winrate;
@@ -227,7 +231,7 @@ public void decisionFunc(){
                 });
     }
 
-    public IFuture<Void> ConfirmStockBuy(IComponentIdentifier agentid, String stockname, int quantity, double price) {
+    public IFuture<Void> ConfirmStockBuy(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price) {
 
         if(agentid == this.agent.getComponentIdentifier()) { //confirmaçao do mercado
             if(money >= quantity*price){
@@ -243,6 +247,13 @@ public void decisionFunc(){
                     stocksOwned.put(stockname,quantity);
                 }
 
+                SServiceProvider.getService(agent, AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM)
+                        .addResultListener(new DefaultResultListener<AgentChatService>() {
+                            public void resultAvailable(AgentChatService service) {
+                                service.BuyStockMessage(agentid, stockname, quantity, price);
+                            }
+                        });
+
                 System.out.println("type1 agent comprou stock: "+ stockname + ": " + quantity);
                 System.out.println(stocksOwned);
 
@@ -256,7 +267,7 @@ public void decisionFunc(){
         return null;
     }
 
-    public IFuture<Void> ConfirmStockSell(IComponentIdentifier agentid, String stockname, int quantity, double price) {
+    public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price) {
         if(stocksOwned.get(stockname)-quantity <= 0) {
             stocksOwned.remove(stockname);
         }else{
@@ -268,6 +279,13 @@ public void decisionFunc(){
         money += quantity*price;
 
 
+        SServiceProvider.getService(agent, AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM)
+                .addResultListener(new DefaultResultListener<AgentChatService>() {
+                    public void resultAvailable(AgentChatService service) {
+                        service.SellStockMessage(agentid, stockname, quantity, price);
+                    }
+                });
+
         System.out.println("Agent type1 vendeu saldo: "+ money);
         System.out.println(stocksOwned);
 
@@ -275,6 +293,25 @@ public void decisionFunc(){
     }
 
 
+    public IFuture<Void> BuyStockMessage(IComponentIdentifier agentid, String stockname, int quantity, double price /* 0 for send, 1 for receive */) {
+        if(agentid == this.agent.getComponentIdentifier()){
+            System.out.println("Sou eu, vou ignorar");
+            return null;
+        }
+        else{
+            System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
+        }
+        return null;
+    }
 
-
+    public IFuture<Void> SellStockMessage(IComponentIdentifier agentid, String stockname, int quantity, double price) {
+        if(agentid == this.agent.getComponentIdentifier()){
+            System.out.println("Sou eu, vou ignorar");
+            return null;
+        }
+        else {
+            System.out.println("O agente com o id " + agentid + " vendeu " + quantity + " stocks de " + stockname);
+        }
+        return null;
+    }
 }
