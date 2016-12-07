@@ -30,7 +30,7 @@ import java.util.*;
 @Service
 @Arguments
 @ProvidedServices({
-        @ProvidedService(type=AgentChatService.class)
+        @ProvidedService(type=AgentChatService.class),
         @ProvidedService(type=MarketAgentService.class),
 })
 @Description("random agent")
@@ -124,13 +124,11 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
                 }
 
                 updateGUI();
-                SServiceProvider.getService(agent, AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM)
-                        .addResultListener(new DefaultResultListener<AgentChatService>() {
-                                service.BuyStockMessage(agentid, stockname, quantity, price);
-                            public void resultAvailable(AgentChatService service) {
-                            }
-                        });
-
+                SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                    public void intermediateResultAvailable(AgentChatService service) {
+                        service.BuyStockMessage(agentid, stockname, quantity, price);
+                    }
+                });
 
             }else{
                 //nao tem guito para comprar
@@ -154,12 +152,11 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
 
             money += quantity*price;
 
-        SServiceProvider.getService(agent, AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM)
-                .addResultListener(new DefaultResultListener<AgentChatService>() {
-                    public void resultAvailable(AgentChatService service) {
-                        service.SellStockMessage(agentid, stockname, quantity, price);
-                    }
-                });
+        SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+            public void intermediateResultAvailable(AgentChatService service) {
+                service.SellStockMessage(agentid, stockname, quantity, price);
+            }
+        });
       //  System.out.println("vendeu   saldo: "+money);
         updateGUI();
 
@@ -256,9 +253,9 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
         SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
             public void intermediateResultAvailable(AgentRequestService is) {
                             Random rand = new Random();
-                            n[0] = rand.nextInt(stockValues.get(stockValues.size() - 1).size());//escolher uma stock para comprar
+                            int n = rand.nextInt(stockValues.get(stockValues.size() - 1).size());//escolher uma stock para comprar
 
-                            if (stockValues.get(stockValues.size() - 1).get(n[0]).size() > 2) {//close
+                            if (stockValues.get(stockValues.size() - 1).get(n).size() > 2) {//close
 
                                 double test = money / (Double) stockValues.get(stockValues.size() - 1).get(n).get("Close");
                                 int rand2 = rand.nextInt((int) test);

@@ -263,12 +263,11 @@ public void decisionFunc(){
                     stocksOwned.put(stockname,quantity);
                 }
 
-                SServiceProvider.getService(agent, AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM)
-                        .addResultListener(new DefaultResultListener<AgentChatService>() {
-                            public void resultAvailable(AgentChatService service) {
-                                service.BuyStockMessage(agentid, stockname, quantity, price);
-                            }
-                        });
+                SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                    public void intermediateResultAvailable(AgentChatService service) {
+                        service.BuyStockMessage(agentid, stockname, quantity, price);
+                    }
+                });
 
                 System.out.println("type1 agent comprou stock: "+ stockname + ": " + quantity);
                 updateGUI();
@@ -296,12 +295,11 @@ public void decisionFunc(){
         money += quantity*price;
 
 
-        SServiceProvider.getService(agent, AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM)
-                .addResultListener(new DefaultResultListener<AgentChatService>() {
-                    public void resultAvailable(AgentChatService service) {
-                        service.SellStockMessage(agentid, stockname, quantity, price);
-                    }
-                });
+        SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+            public void intermediateResultAvailable(AgentChatService service) {
+                service.SellStockMessage(agentid, stockname, quantity, price);
+            }
+        });
 
         System.out.println("Agent type1 vendeu saldo: "+ money);
         updateGUI();
