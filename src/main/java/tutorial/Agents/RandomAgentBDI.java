@@ -46,11 +46,12 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
 
     @Agent
     protected IInternalAccess agent;
-    @Belief
-    private ArrayList<Integer> followers;
-    @Belief
 
-    private ArrayList<Integer> following;
+    @Belief
+    private List<IComponentIdentifier> followers;
+
+    @Belief
+    private List<IComponentIdentifier> following;
 
     @AgentFeature
     protected IBDIAgentFeature bdiFeature;
@@ -75,8 +76,8 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
         stockValues = new ArrayList<ArrayList<HashMap>>();
         stockHist = new HashMap<String, Integer>();
         GUI = new TraderGUI();
-        //followers = new ArrayList<Integer>();
-        //following = new ArrayList<Integer>();
+        followers = new ArrayList<IComponentIdentifier>();
+        following = new ArrayList<IComponentIdentifier>();
     }
 
     @AgentBody
@@ -306,12 +307,29 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
         GUI.carteiraGUI.setText(String.valueOf(calcMoney()));
     }
 
-    public IFuture<Void> BuyStockMessage(IComponentIdentifier agentid, String stockname, int quantity, double price /* 0 for send, 1 for receive */) {
+    public IFuture<Void> BuyStockMessage(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price /* 0 for send, 1 for receive */) {
         if(agentid == this.agent.getComponentIdentifier()){
             System.out.println("Sou eu, vou ignorar");
             return null;
         }
         else{
+            if (following.size() <= 3){
+                if(!following.contains(agentid)){
+                    following.add(agentid);
+                    //Enviar mensagem a dizer que está a seguir
+                    SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                        public void intermediateResultAvailable(AgentChatService service) {
+                            service.FollowMessage(agentid, agent.getComponentIdentifier());
+                        }
+                    });
+                }
+                else{
+                    System.out.println("Ja o estas a seguir");
+                }
+            }
+            else{
+                System.out.println("Nao podes seguir mais ninguém");
+            }
             System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
         }
         return null;
@@ -324,6 +342,32 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
         }
         else {
             System.out.println("O agente com o id " + agentid + " vendeu " + quantity + " stocks de " + stockname);
+        }
+        return null;
+    }
+
+    public IFuture<Void> FollowMessage(IComponentIdentifier agentid, IComponentIdentifier followerid) {
+        if(agentid == this.agent.getComponentIdentifier()){
+            if(!followers.contains(followerid)){
+                followers.add(followerid);
+            }
+            System.out.println(agentid + " esta a ser seguido pelo " + followerid);
+        }
+        else{
+            //O agentid está a seguir o followerid, fazer algo
+        }
+        return null;
+    }
+
+    public IFuture<Void> UnfollowMessage(IComponentIdentifier agentid, IComponentIdentifier followerid) {
+        if(agentid == this.agent.getComponentIdentifier()){
+            if(followers.contains(followerid)){
+                followers.remove(followerid);
+            }
+            System.out.println(agentid + " deixou de seguir o " + followerid);
+        }
+        else{
+            //O agentid deixou de seguir o followerid, fazer algo
         }
         return null;
     }
