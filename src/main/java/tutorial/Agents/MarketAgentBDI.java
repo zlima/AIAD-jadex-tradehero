@@ -50,8 +50,6 @@ public class MarketAgentBDI implements AgentRequestService {
     @Belief
     private int dayspassed;
 
-    private int dayspassedaux;
-
     @Belief
     private String[] symbols = new String[] {"INTC", "BABA", "TSLA", "YHOO", "GOOG"};
 
@@ -73,7 +71,6 @@ public class MarketAgentBDI implements AgentRequestService {
     private void init(){
         GUI = new markerGUI();
         dayspassed = 0;
-        dayspassedaux=0;
         try {
             getStocksHist();
         } catch (IOException e) {

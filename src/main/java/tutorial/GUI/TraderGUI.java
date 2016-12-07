@@ -10,4 +10,7 @@ public class TraderGUI {
     public JLabel saldoGUI;
     public JList stocksGUI;
     public JLabel carteiraGUI;
+    public JList seguidoresList;
+    public JList seguirList;
+    public JList followerGainsGUI;
 }
