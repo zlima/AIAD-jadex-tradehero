@@ -112,7 +112,7 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
         return null;
     }
 
-    public IFuture<Void> ConfirmStockBuy(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price) {
+    public IFuture<Void> ConfirmStockBuy(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type) {
         if(agentid == this.agent.getComponentIdentifier()) { //confirmaçao do mercado
             if(money >= quantity*price){
 
@@ -128,11 +128,14 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
                 }
 
                 updateGUI();
-                SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
-                    public void intermediateResultAvailable(AgentChatService service) {
-                        service.BuyStockMessage(agentid, stockname, quantity, price);
-                    }
-                });
+
+                if(type==1) {
+                    SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                        public void intermediateResultAvailable(AgentChatService service) {
+                            service.BuyStockMessage(agentid,stockname,quantity,price);
+                        }
+                    });
+                }
 
             }else{
                 //nao tem guito para comprar
@@ -145,7 +148,7 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
     }
 
 
-    public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price) {
+    public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type) {
         if(stocksOwned.get(stockname)-quantity <= 0) {
             stocksOwned.remove(stockname);
         }else{
@@ -155,14 +158,16 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
         }
 
             money += quantity*price;
+        if(type==1) {
+            SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                public void intermediateResultAvailable(AgentChatService service) {
+                    service.SellStockMessage(agentid, stockname, quantity, price);
+                }
+            });
+            updateGUI();
 
-        SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
-            public void intermediateResultAvailable(AgentChatService service) {
-                service.SellStockMessage(agentid, stockname, quantity, price);
-            }
-        });
+        }
       //  System.out.println("vendeu   saldo: "+money);
-        updateGUI();
 
         return null;
     }
@@ -215,10 +220,10 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
 
                 if (stockValues.get(stockValues.size() - 1).get(0).size() > 2) {
                     is.SellStockRequest(agent.getComponentIdentifier(), symbol
-                            , rand2,(Double) stockValues.get(stockValues.size() - 1).get(j).get("Close"));
+                            , rand2,(Double) stockValues.get(stockValues.size() - 1).get(j).get("Close"),1);
                 }else{
                     is.SellStockRequest(agent.getComponentIdentifier(), symbol
-                            , rand2,(Double) stockValues.get(stockValues.size() - 1).get(j).get("Open") );
+                            , rand2,(Double) stockValues.get(stockValues.size() - 1).get(j).get("Open"),1 );
                 }
             }
         });
@@ -264,12 +269,12 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
                                 double test = money / (Double) stockValues.get(stockValues.size() - 1).get(n).get("Close");
                                 int rand2 = rand.nextInt((int) test);
                                 is.BuyStocksRequest(agent.getComponentIdentifier(), (String) stockValues.get(stockValues.size() - 1).get(n).get("Symbol"), rand2,
-                                        (Double) stockValues.get(stockValues.size() - 1).get(n).get("Close"));
+                                        (Double) stockValues.get(stockValues.size() - 1).get(n).get("Close"),1);
                             } else {
                                 double test = money / (Double) stockValues.get(stockValues.size() - 1).get(n).get("Open");
                                 int rand2 = rand.nextInt((int) test);
                                 is.BuyStocksRequest(agent.getComponentIdentifier(), (String) stockValues.get(stockValues.size() - 1).get(n).get("Symbol"), rand2,
-                                        (Double) stockValues.get(stockValues.size() - 1).get(n).get("Open"));
+                                        (Double) stockValues.get(stockValues.size() - 1).get(n).get("Open"),1);
                             }
                         }
                         });
@@ -340,18 +345,19 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
                 System.out.println("Nao podes seguir mais ninguém");
             }
             System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
-            buyStock(stockname,price,quantity);
+            buyStock(stockname,price,quantity,0);
         }
         return null;
     }
 
-    private void buyStock(final String name, final double price, final int numsShares){
+    private void buyStock(final String name, final double price, final int numsShares, final int type){
 
-        SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
-            public void intermediateResultAvailable(AgentRequestService is) {
-                is.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price);
-            }
-        });
+                SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
+                    public void intermediateResultAvailable(AgentRequestService is) {
+                        is.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
+                    }
+                });
+
     }
 
     public IFuture<Void> SellStockMessage(final IComponentIdentifier agentid, String stockname, final int quantity, final double price) {
@@ -363,7 +369,7 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
             System.out.println("O agente com o id " + agentid + " vendeu " + quantity + " stocks de " + stockname);
             if(following.contains(agentid)){
                 //vender e mandar dinhiro
-                sellStock(stockname,price,quantity);
+                sellStock(stockname,price,quantity,0);
                 this.money -= quantity*price*0.10;
                 //enviar dinheiro
                 SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
@@ -376,11 +382,11 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
         return null;
     }
 
-    private void sellStock(final String name, final double price, final int numsShares){
+    private void sellStock(final String name, final double price, final int numsShares, final int type){
 
         SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
             public void intermediateResultAvailable(AgentRequestService is) {
-                is.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price);
+                is.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price,type);
             }
         });
     }
@@ -440,6 +446,7 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
             }
 
             GUI.followerGainsGUI.setModel(listModel);
+
 
         }
 

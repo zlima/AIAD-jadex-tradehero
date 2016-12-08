@@ -40,8 +40,8 @@ public class main {
                 PlatformConfiguration config  = PlatformConfiguration.processArgs(defargs);
 
                 config.addComponent("tutorial.Agents.MarketAgentBDI.class");
-                config.addComponent("tutorial.Agents.RandomAgentBDI.class");
-                config.addComponent("tutorial.Agents.Type1AgentBDI.class");
+               // config.addComponent("tutorial.Agents.RandomAgentBDI.class");
+                config.addComponent("tutorial.Agents.MansoAgentBDI.class");
                 config.addComponent("tutorial.Agents.Type1AgentBDI.class");
 
 
