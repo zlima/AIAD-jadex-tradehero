@@ -20,7 +20,9 @@ import tutorial.Services.AgentChatService;
 import yahoofinance.histquotes.HistoricalQuote;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by Cenas on 10/19/2016.
@@ -94,10 +96,10 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JFrame f = new JFrame();
+                f.setSize(new Dimension(440,340));
                 f.setTitle(agent.getComponentIdentifier().getName());
                 f.setContentPane(GUI.panel1);
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                f.pack();
                 GUI.saldoGUI.setText(String.valueOf(money));
                 f.setVisible(true);
             }
@@ -110,10 +112,6 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
     public IFuture<Void> UpdateMarketService(ArrayList<HashMap> quote) {
         stockValues.add(quote);
         updatedstock = !updatedstock;
-
-       // System.out.println(stockValues.get(stockValues.size()-1).get(0).get("Symbol"));
-        //parsetoStock(quote);
-        //System.out.println(quote.get(0).getOpen());
         return null;
     }
 
@@ -163,14 +161,13 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
         }
 
             money += quantity*price;
+            updateGUI();
         if(type==1) {
             SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                 public void intermediateResultAvailable(AgentChatService service) {
                     service.SellStockMessage(agentid, stockname, quantity, price);
                 }
             });
-            updateGUI();
-
         }
       //  System.out.println("vendeu   saldo: "+money);
 
@@ -382,11 +379,11 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
             if(following.contains(agentid)){
                 //vender e mandar dinhiro
                 sellStock(stockname,price,quantity,0);
-                this.money -= quantity*price*0.10;
+                this.money -= quantity*price*0.30;
                 //enviar dinheiro
                 SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                     public void intermediateResultAvailable(AgentChatService service) {
-                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.10);
+                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.30);
                     }
                 });
             }
@@ -442,8 +439,8 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
     }
 
     public IFuture<Void> sendMoney(IComponentIdentifier agentid, IComponentIdentifier senderid ,double qty) {
-
         if(this.agent.getComponentIdentifier() == agentid){
+            System.out.println("BAZINIENFNFIUEHWIUFHIUWEHFIUEHWFIUEWHFIUFWHE");
             if(!followersGains.containsKey(senderid.getName())){
                 followersGains.put(senderid.getName(),qty);
                 this.money += qty;
@@ -458,7 +455,6 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
             }
 
             GUI.followerGainsGUI.setModel(listModel);
-
 
         }
 

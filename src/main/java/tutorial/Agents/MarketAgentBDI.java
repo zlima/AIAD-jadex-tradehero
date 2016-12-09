@@ -89,10 +89,10 @@ public class MarketAgentBDI implements AgentRequestService {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JFrame f = new JFrame();
+                f.setSize(new Dimension(300,130));
                 f.setContentPane(GUI.panelMain);
                 f.setTitle("Market Agent");
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                f.pack();
                 f.setVisible(true);
             }
         });

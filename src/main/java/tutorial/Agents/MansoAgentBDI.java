@@ -21,7 +21,9 @@ import tutorial.Services.AgentChatService;
 import yahoofinance.histquotes.HistoricalQuote;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import static jadex.base.RootComponentConfiguration.GUI;
 
@@ -85,10 +87,10 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JFrame f = new JFrame();
+                f.setSize(new Dimension(300,130));
                 f.setTitle(agent.getComponentIdentifier().getName());
                 f.setContentPane(GUI.panel1);
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                f.pack();
                 GUI.saldoGUI.setText(String.valueOf(money));
                 f.setVisible(true);
             }
@@ -159,14 +161,17 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
             if(following.contains(agentid)){
                 //vender e mandar dinhiro
                 sellStock(stockname,price,quantity,0);
-                this.money -= quantity*price*0.10;
-                updateGUI();
+                this.money -= quantity*price*0.30;
+
                 //enviar dinheiro
                 SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                     public void intermediateResultAvailable(AgentChatService service) {
-                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.10);
+                        System.out.println("EUEIUIUEWHIUEWHFIUWEHFIUHEWIUEWHIUFHWEIUFHEWIUFHIUEWFHIUEWFHIUEHWFIUHEWFIUHEIUHFEIWUHFIUEWHFE");
+                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.30);
                     }
                 });
+
+                updateGUI();
             }
         }
         return null;
@@ -294,7 +299,7 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
         }
 
         money += quantity*price;
-
+        updateGUI();
         if(type==1) {
             SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                 public void intermediateResultAvailable(AgentChatService service) {
@@ -303,7 +308,6 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
             });
             System.out.println("Agent type1 vendeu saldo: "+ money);
             updateGUI();
-            System.out.println(stocksOwned);
         }
 
 

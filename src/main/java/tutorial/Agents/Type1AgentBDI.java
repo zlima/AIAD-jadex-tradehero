@@ -22,8 +22,10 @@ import tutorial.Services.MarketAgentService;
 import yahoofinance.histquotes.HistoricalQuote;
 
 import javax.swing.*;
+import java.awt.*;
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by Cenas on 12/5/2016.
@@ -105,10 +107,10 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JFrame f = new JFrame();
+                f.setSize(new Dimension(300,130));
                 f.setTitle(agent.getComponentIdentifier().getName());
                 f.setContentPane(GUI.panel1);
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                f.pack();
                 GUI.saldoGUI.setText(String.valueOf(money));
                 f.setVisible(true);
             }
@@ -315,15 +317,14 @@ public void decisionFunc(){
         }
 
         money += quantity*price;
-
+        updateGUI();
         if(type==1) {
             SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                 public void intermediateResultAvailable(AgentChatService service) {
                     service.SellStockMessage(agentid,stockname,quantity,price);
                 }
             });
-            System.out.println("Agent type1 vendeu saldo: "+ money);
-            updateGUI();
+
            // System.out.println(stocksOwned);
         }
 
@@ -384,11 +385,11 @@ public void decisionFunc(){
             if(following.contains(agentid)){
                 //vender e mandar dinhiro
                 sellStock(stockname,price,quantity,0);
-                this.money -= quantity*price*0.10;
+                this.money -= quantity*price*0.30;
                 //enviar dinheiro
                 SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                     public void intermediateResultAvailable(AgentChatService service) {
-                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.10);
+                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.30);
                     }
                 });
             }
@@ -473,6 +474,7 @@ public void decisionFunc(){
                 listModel.addElement(pair.getKey() + " : " + pair.getValue());
             }
             //ver isto aqui
+            System.out.println("HELLOLOLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOoo");
             GUI.followerGainsGUI.setModel(listModel);
 
         }

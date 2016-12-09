@@ -61,7 +61,7 @@ public class main {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     JFrame f = new JFrame();
-                    f.setSize(new Dimension(750, 575));
+                    f.setSize(new Dimension(960, 470));
                     f.setTitle("MENU");
                     f.setContentPane(GUI.panel);
                     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
