@@ -30,6 +30,12 @@ import java.util.*;
  */
 
 @Agent
+@Arguments({
+        @Argument(name="money", clazz=Double.class, defaultvalue="9999.99"),
+        @Argument(name="numfollow", clazz=Integer.class, defaultvalue="3"),
+        @Argument(name="numComprar", clazz=Integer.class, defaultvalue="3"),
+        @Argument(name="numVender", clazz=Integer.class, defaultvalue="3")
+})
 @Service
 @ProvidedServices({
         @ProvidedService(type=MarketAgentService.class),
@@ -72,14 +78,13 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
     private TraderGUI GUI;
 
     protected HashMap<String,Double> followersGains;
-
+    private int numfollow,numComprar,numVender;
 
     @AgentCreated
     private void init(){
         Market = new HashMap<String,List<HistoricalQuote>>();
         stocksOwned = new HashMap<String, Integer>();
         winrate = 0.0;
-        money = 400000;
         stockValues = new ArrayList<ArrayList<HashMap>>();
         stockHist = new HashMap<String, Integer>();
         recordVariationMap = new HashMap<String, double[]>();
@@ -87,6 +92,10 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
         followers = new ArrayList<IComponentIdentifier>();
         following = new ArrayList<IComponentIdentifier>();
         followersGains = new HashMap<String, Double>();
+        this.money = (Double) agent.getArgument("money");
+        this.numfollow = (Integer) agent.getArgument("numfollow");
+        this.numComprar = (Integer) agent.getArgument("numComprar");
+        this.numVender = (Integer) agent.getArgument("numVender");
     }
 
     @AgentBody
@@ -228,12 +237,12 @@ public double searchStockPrice(String symbol){
 public void decisionFunc(){
 
     for (Map.Entry<String, double[]> stock : recordVariationMap.entrySet()) {
-        if(stock.getValue()[0] >= 1){
+        if(stock.getValue()[0] >= numVender){
             //vender stocks aqui
 
             sellStock(stock.getKey(),searchStockPrice(stock.getKey()),5,1);
 
-        }else if(stock.getValue()[0] <= - 1){
+        }else if(stock.getValue()[0] <= - numComprar){
             //comprar aqui
             buyStock(stock.getKey(),searchStockPrice(stock.getKey()),5,1);
         }
@@ -329,7 +338,7 @@ public void decisionFunc(){
             return null;
         }
         else{
-            if (following.size() < 3){
+            if (following.size() < numfollow){
                 if(!following.contains(agentid)){
                     following.add(agentid);
                     DefaultListModel listModel = new DefaultListModel();
@@ -350,11 +359,17 @@ public void decisionFunc(){
                 }
             }
             else{
-               // System.out.println("Nao podes seguir mais ninguém");
+                System.out.println("Nao podes seguir mais ninguém");
+                if(following.contains(agentid)) {
+                    System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
+                    buyStock(stockname, price, quantity, 0);
+                }
+                return null;
             }
-                buyStock(stockname,price,quantity,0);
-                //System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
-
+            if(following.contains(agentid)) {
+                System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
+                buyStock(stockname, price, quantity, 0);
+            }
         }
         return null;
     }
@@ -457,7 +472,7 @@ public void decisionFunc(){
             for (Map.Entry<String, Double> pair : followersGains.entrySet()) {
                 listModel.addElement(pair.getKey() + " : " + pair.getValue());
             }
-
+            //ver isto aqui
             GUI.followerGainsGUI.setModel(listModel);
 
         }

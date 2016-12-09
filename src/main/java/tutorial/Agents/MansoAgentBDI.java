@@ -30,8 +30,12 @@ import static jadex.base.RootComponentConfiguration.GUI;
  */
 
 @Agent
+@Arguments({
+        @Argument(name="money", clazz=Double.class, defaultvalue="N/A"),
+        @Argument(name="numfollow", clazz=Integer.class, defaultvalue="3"),
+})
+
 @Service
-@Arguments
 @ProvidedServices({
         @ProvidedService(type=AgentChatService.class),
         @ProvidedService(type=MarketAgentService.class),
@@ -59,9 +63,11 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
 
     protected HashMap<String,Double> followersGains;
 
+    private int numfollowers;
+    private int numfollow;
+
     @AgentCreated
     private void init(){
-
 
         GUI = new TraderGUI();
         followers = new ArrayList<IComponentIdentifier>();
@@ -69,7 +75,8 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
          stockValues = new ArrayList<ArrayList<HashMap>>();
         stocksOwned = new HashMap<String, Integer>();
         followersGains = new HashMap<String,Double>();
-        money=400000000;
+        this.money = (Double) agent.getArgument("money");
+        this.numfollow = (Integer) agent.getArgument("numfollow");
     }
 
     @AgentBody
@@ -95,7 +102,7 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
             return null;
         }
         else{
-            if (following.size() < 3){
+            if (following.size() < numfollow){
                 if(!following.contains(agentid)){
                     following.add(agentid);
                     DefaultListModel listModel = new DefaultListModel();
@@ -117,9 +124,16 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
             }
             else{
                 System.out.println("Nao podes seguir mais ninguém");
+                if(following.contains(agentid)) {
+                    System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
+                    buyStock(stockname, price, quantity, 0);
+                }
+                return null;
             }
-            System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
-            buyStock(stockname,price,quantity,0);
+            if(following.contains(agentid)) {
+                System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
+                buyStock(stockname, price, quantity, 0);
+            }
         }
         return null;
     }
@@ -146,6 +160,7 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
                 //vender e mandar dinhiro
                 sellStock(stockname,price,quantity,0);
                 this.money -= quantity*price*0.10;
+                updateGUI();
                 //enviar dinheiro
                 SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                     public void intermediateResultAvailable(AgentChatService service) {
@@ -229,6 +244,7 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
         DefaultListModel listModel = new DefaultListModel();
         for (Map.Entry<String, Integer> pair : stocksOwned.entrySet()) {
             listModel.addElement(pair.getKey() + " : " + pair.getValue());
+
         }
 
         GUI.stocksGUI.setModel(listModel);

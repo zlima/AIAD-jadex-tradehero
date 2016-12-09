@@ -28,7 +28,11 @@ import java.util.*;
 
 @Agent
 @Service
-@Arguments
+@Arguments({
+        @Argument(name="money", clazz=Double.class, defaultvalue="99.9"),
+        @Argument(name="numfollow", clazz=Integer.class, defaultvalue="3"),
+})
+
 @ProvidedServices({
         @ProvidedService(type=AgentChatService.class),
         @ProvidedService(type=MarketAgentService.class),
@@ -63,7 +67,7 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
     protected ArrayList<ArrayList<HashMap>> stockValues;
 
     protected HashMap<String, Double> followersGains;
-
+    private int numfollow;
 
 
     private TraderGUI GUI;
@@ -74,13 +78,14 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
         Market = new HashMap<String,List<HistoricalQuote>>();
         stocksOwned = new HashMap<String, Integer>();
         winrate = 0.0;
-        money = 400000;
         stockValues = new ArrayList<ArrayList<HashMap>>();
         stockHist = new HashMap<String, Integer>();
         GUI = new TraderGUI();
         followers = new ArrayList<IComponentIdentifier>();
         following = new ArrayList<IComponentIdentifier>();
         followersGains = new HashMap<String, Double>();
+        this.money = (Double) agent.getArgument("money");
+        this.numfollow = (Integer) agent.getArgument("numfollow");
     }
 
     @AgentBody
@@ -321,7 +326,7 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
             return null;
         }
         else{
-            if (following.size() < 3){
+            if (following.size() < numfollow){
                 if(!following.contains(agentid)){
                     following.add(agentid);
                     DefaultListModel listModel = new DefaultListModel();
@@ -343,9 +348,16 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
             }
             else{
                 System.out.println("Nao podes seguir mais ninguém");
+                if(following.contains(agentid)) {
+                    System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
+                    buyStock(stockname, price, quantity, 0);
+                }
+                return null;
             }
-            System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
-            buyStock(stockname,price,quantity,0);
+            if(following.contains(agentid)) {
+                System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
+                buyStock(stockname, price, quantity, 0);
+            }
         }
         return null;
     }
