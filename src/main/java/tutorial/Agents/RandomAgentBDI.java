@@ -306,6 +306,7 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
     }
 
     public void updateGUI(){
+        System.out.flush();
         GUI.saldoGUI.setText(String.valueOf(money));
         DefaultListModel listModel = new DefaultListModel();
         for (Map.Entry<String, Integer> pair : stocksOwned.entrySet()) {
@@ -440,7 +441,6 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
 
     public IFuture<Void> sendMoney(IComponentIdentifier agentid, IComponentIdentifier senderid ,double qty) {
         if(this.agent.getComponentIdentifier() == agentid){
-            System.out.println("BAZINIENFNFIUEHWIUFHIUWEHFIUEHWFIUEWHFIUFWHE");
             if(!followersGains.containsKey(senderid.getName())){
                 followersGains.put(senderid.getName(),qty);
                 this.money += qty;
@@ -453,7 +453,7 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
             for (Map.Entry<String, Double> pair : followersGains.entrySet()) {
                 listModel.addElement(pair.getKey() + " : " + pair.getValue());
             }
-
+            System.out.flush();
             GUI.followerGainsGUI.setModel(listModel);
 
         }

@@ -166,7 +166,6 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
                 //enviar dinheiro
                 SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                     public void intermediateResultAvailable(AgentChatService service) {
-                        System.out.println("EUEIUIUEWHIUEWHFIUWEHFIUHEWIUEWHIUFHWEIUFHEWIUFHIUEWFHIUEWFHIUEHWFIUHEWFIUHEIUHFEIWUHFIUEWHFE");
                         service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.30);
                     }
                 });
@@ -200,6 +199,7 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
             for (Map.Entry<String, Double> pair : followersGains.entrySet()) {
                 listModel.addElement(pair.getKey() + " : " + pair.getValue());
             }
+            System.out.flush();
 
             GUI.followerGainsGUI.setModel(listModel);
 
@@ -245,6 +245,7 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
     }
 
     public void updateGUI(){
+        System.out.flush();
         GUI.saldoGUI.setText(String.valueOf(money));
         DefaultListModel listModel = new DefaultListModel();
         for (Map.Entry<String, Integer> pair : stocksOwned.entrySet()) {

@@ -447,6 +447,7 @@ public void decisionFunc(){
     }
 
     public void updateGUI(){
+        System.out.flush();
         DefaultListModel listModel = new DefaultListModel();
         GUI.saldoGUI.setText(String.valueOf(money));
         for (Map.Entry<String, Integer> pair : stocksOwned.entrySet()) {
@@ -474,7 +475,7 @@ public void decisionFunc(){
                 listModel.addElement(pair.getKey() + " : " + pair.getValue());
             }
             //ver isto aqui
-            System.out.println("HELLOLOLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOoo");
+            System.out.flush();
             GUI.followerGainsGUI.setModel(listModel);
 
         }
