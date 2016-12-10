@@ -9,27 +9,21 @@ import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.annotation.Service;
 import jadex.bridge.service.search.SServiceProvider;
-import jadex.commons.future.DefaultResultListener;
 import jadex.commons.future.IFuture;
 import jadex.commons.future.IntermediateDefaultResultListener;
 import jadex.micro.annotation.*;
-import org.apache.batik.bridge.Mark;
-import org.apache.batik.gvt.Marker;
-import tutorial.Services.AgentChatService;
 import tutorial.GUI.TraderGUI;
+import tutorial.Services.AgentChatService;
 import tutorial.Services.AgentRequestService;
 import tutorial.Services.MarketAgentService;
 import yahoofinance.histquotes.HistoricalQuote;
 
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-/**
- * Created by Cenas on 12/5/2016.
- */
+import java.util.Map;
 
 @Agent
 @Arguments({
@@ -43,11 +37,10 @@ import java.util.List;
         @ProvidedService(type=MarketAgentService.class),
         @ProvidedService(type=AgentChatService.class)
 })
-@Description("agent type 1")
+@Description("Type1 Agent")
 public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
 
     private double money; //dinheiro do agent
-    private double winrate;
     private Map<String,Integer> stocksOwned;
     private Map<String,Integer> stockHist;
 
@@ -72,7 +65,6 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
     @Agent
     IInternalAccess agent;
 
-
     protected ArrayList<ArrayList<HashMap>> stockValues;
 
     protected HashMap<String,double[]> recordVariationMap;
@@ -86,7 +78,6 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
     private void init(){
         Market = new HashMap<String,List<HistoricalQuote>>();
         stocksOwned = new HashMap<String, Integer>();
-        winrate = 0.0;
         stockValues = new ArrayList<ArrayList<HashMap>>();
         stockHist = new HashMap<String, Integer>();
         recordVariationMap = new HashMap<String, double[]>();
@@ -102,8 +93,6 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
 
     @AgentBody
     private void body(){
-
-
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 JFrame f = new JFrame();
@@ -115,10 +104,7 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
                 f.setVisible(true);
             }
         });
-
     }
-
-
 
     public IFuture<Void> UpdateMarketService(ArrayList<HashMap> quote) {
         stockValues.add(quote);
@@ -128,8 +114,6 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
         return null;
     }
 
-
-    //alterar aqui
     @Plan(trigger=@Trigger(factchangeds="updatedstock"))
     public void newStockvalues(){
         recordVariation();
@@ -137,7 +121,6 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
     }
 
     public void recordVariation() {
-
         if (recordVariationMap.size() == 0) {
             for (int i = 0; i < stockValues.get(stockValues.size() - 1).size(); i++) {
                 HashMap<String, Integer[]> temp = new HashMap<String, Integer[]>();
@@ -217,11 +200,7 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
 
             }
         }
-        //System.out.println(recordVariationMap.get("BABA")[0] +" ," +
-        //        " "+recordVariationMap.get("INTC")[0]);
-
     }
-
 
 public double searchStockPrice(String symbol){
     for(int i=0;i<stockValues.get(stockValues.size()-1).size();i++){
@@ -241,9 +220,7 @@ public void decisionFunc(){
     for (Map.Entry<String, double[]> stock : recordVariationMap.entrySet()) {
         if(stock.getValue()[0] >= numVender){
             //vender stocks aqui
-
             sellStock(stock.getKey(),searchStockPrice(stock.getKey()),5,1);
-
         }else if(stock.getValue()[0] <= - numComprar){
             //comprar aqui
             buyStock(stock.getKey(),searchStockPrice(stock.getKey()),5,1);
@@ -255,22 +232,21 @@ public void decisionFunc(){
 
         SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
             public void intermediateResultAvailable(AgentRequestService is) {
-                        is.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
-                    }
-                });
+                is.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
+            }
+        });
     }
 
     private void sellStock(final String name, final double price, final int numsShares, final int type){
 
         SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
             public void intermediateResultAvailable(AgentRequestService is) {
-                        is.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
-                    }
-                });
+                is.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
+            }
+        });
     }
 
     public IFuture<Void> ConfirmStockBuy(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type) {
-
         if(agentid == this.agent.getComponentIdentifier()) { //confirmaçao do mercado
             if(money >= quantity*price){
 
@@ -293,17 +269,10 @@ public void decisionFunc(){
                     });
                     updateGUI();
                 }
-                //System.out.println("type1 agent comprou stock: "+ stockname + ": " + quantity);
-
-               // System.out.println(stocksOwned);
-
             }else{
-                //nao tem guito para comprar
-                System.out.println("rip");
+                System.out.println("nao é para mim");
             }
-
         }
-
         return null;
     }
 
@@ -311,9 +280,7 @@ public void decisionFunc(){
         if(stocksOwned.get(stockname)-quantity <= 0) {
             stocksOwned.remove(stockname);
         }else{
-
             stocksOwned.put(stockname, stocksOwned.get(stockname) - quantity);
-
         }
 
         money += quantity*price;
@@ -324,18 +291,13 @@ public void decisionFunc(){
                     service.SellStockMessage(agentid,stockname,quantity,price);
                 }
             });
-
-           // System.out.println(stocksOwned);
         }
-
-
         return null;
     }
 
-
     public IFuture<Void> BuyStockMessage(final IComponentIdentifier agentid, String stockname, int quantity, double price /* 0 for send, 1 for receive */) {
         if(agentid == this.agent.getComponentIdentifier()){
-           // System.out.println("Sou eu, vou ignorar");
+           //System.out.println("Sou eu, vou ignorar");
             return null;
         }
         else{
@@ -356,7 +318,7 @@ public void decisionFunc(){
                     });
                 }
                 else{
-                   // System.out.println("Ja o estas a seguir");
+
                 }
             }
             else{
@@ -381,7 +343,6 @@ public void decisionFunc(){
             return null;
         }
         else {
-           // System.out.println("O agente com o id " + agentid + " vendeu " + quantity + " stocks de " + stockname);
             if(following.contains(agentid)){
                 //vender e mandar dinhiro
                 sellStock(stockname,price,quantity,0);
@@ -408,10 +369,9 @@ public void decisionFunc(){
             }
 
             GUI.seguidoresList.setModel(listModel);
-           // System.out.println(agentid + " esta a ser seguido pelo " + followerid);
         }
         else{
-            //O agentid está a seguir o followerid, fazer algo
+            //O agentid está a seguir o followerid
         }
         return null;
     }
@@ -427,10 +387,9 @@ public void decisionFunc(){
             }
 
             GUI.seguidoresList.setModel(listModel);
-           // System.out.println(agentid + " deixou de seguir o " + followerid);
         }
         else{
-            //O agentid deixou de seguir o followerid, fazer algo
+            //O agentid deixou de seguir o followerid
         }
         return null;
     }
@@ -460,7 +419,6 @@ public void decisionFunc(){
     }
 
     public IFuture<Void> sendMoney(IComponentIdentifier agentid, IComponentIdentifier senderid ,double qty) {
-
         if(this.agent.getComponentIdentifier() == agentid){
             if(!followersGains.containsKey(senderid.getName())){
                 followersGains.put(senderid.getName(),qty);
@@ -474,12 +432,9 @@ public void decisionFunc(){
             for (Map.Entry<String, Double> pair : followersGains.entrySet()) {
                 listModel.addElement(pair.getKey() + " : " + pair.getValue());
             }
-            //ver isto aqui
             System.out.flush();
             GUI.followerGainsGUI.setModel(listModel);
-
         }
-
         return null;
     }
 

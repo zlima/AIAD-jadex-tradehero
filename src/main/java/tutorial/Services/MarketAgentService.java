@@ -13,10 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Cenas on 10/19/2016.
- */
-
 public interface MarketAgentService {
 
     public IFuture<Void> UpdateMarketService(ArrayList<HashMap> quote);

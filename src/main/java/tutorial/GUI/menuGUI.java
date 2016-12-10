@@ -17,13 +17,13 @@ public class menuGUI {
     public JButton criarButton;
     public JPanel tipo1;
     public JPanel random;
-    public JPanel mason;
+    public JPanel passive;
     public JPanel lista;
-    public JButton criarMansoBT;
+    public JButton criarPassiveBT;
     public JButton criarRandomBT;
-    public JSpinner saldoSpinnManso;
-    public JSpinner seguidoresSpinnManso;
-    public JSpinner seguirSpinnManso;
+    public JSpinner saldoSpinnPassive;
+    public JSpinner seguidoresSpinnPassive;
+    public JSpinner seguirSpinnPassive;
     public JSpinner saldoSpinnRand;
     public JSpinner seguirSpinnRand;
     SpinnerNumberModel model ;
@@ -31,8 +31,8 @@ public class menuGUI {
     private void createUIComponents() {
         // TODO: place custom component creation code here
         model = new SpinnerNumberModel(0.0,-999999999999999.0 ,999999999999999.0,0.1);
-        saldoSpinnManso = new JSpinner(model);
-        saldoSpinnManso.setValue(999999.0);
+        saldoSpinnPassive = new JSpinner(model);
+        saldoSpinnPassive.setValue(999999.0);
 
         saldoSpinnTip = new JSpinner(model);
         saldoSpinnTip.setValue(999999.0);

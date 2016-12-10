@@ -71,14 +71,14 @@ public class main {
             cms.createComponent("tutorial.Agents.MarketAgentBDI.class",null).getFirstResult(sus);
         }
 
-            public static void createNewManso(Double money, int numfollow){
+            public static void createNewPassive(Double money, int numfollow){
 
                 Map<String, Object> agentArgs = new HashMap<String, Object>();
                 agentArgs.put("money", money);
                 agentArgs.put("numfollow", numfollow);
                 CreationInfo agentInfo = new CreationInfo(agentArgs);
 
-                cms.createComponent("tutorial.Agents.MansoAgentBDI.class", agentInfo).getFirstResult(sus);
+                cms.createComponent("tutorial.Agents.PassiveAgentBDI.class", agentInfo).getFirstResult(sus);
 
             }
 
@@ -110,7 +110,7 @@ public class main {
 
     public static void initGUI() {
 
-        GUI.seguirSpinnManso.setValue(3);
+        GUI.seguirSpinnPassive.setValue(3);
         //ciar agente tipo1
         GUI.criarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -119,9 +119,9 @@ public class main {
             }
         });
 
-        GUI.criarMansoBT.addActionListener(new ActionListener() {
+        GUI.criarPassiveBT.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-             createNewManso((Double)GUI.saldoSpinnManso.getValue(),(Integer)GUI.seguirSpinnManso.getValue());
+             createNewPassive((Double)GUI.saldoSpinnPassive.getValue(),(Integer)GUI.seguirSpinnPassive.getValue());
             }
         });
 

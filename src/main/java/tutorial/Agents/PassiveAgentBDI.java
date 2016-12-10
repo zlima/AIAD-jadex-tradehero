@@ -1,35 +1,26 @@
 package tutorial.Agents;
 
-import jadex.bdiv3.annotation.*;
-import jadex.bdiv3.features.IBDIAgentFeature;
-import jadex.bdiv3.features.impl.BDIAgentFeature;
-import jadex.bdiv3.runtime.ChangeEvent;
+import jadex.bdiv3.annotation.Belief;
 import jadex.bridge.IComponentIdentifier;
 import jadex.bridge.IInternalAccess;
 import jadex.bridge.service.RequiredServiceInfo;
 import jadex.bridge.service.annotation.Service;
 import jadex.bridge.service.search.SServiceProvider;
-import jadex.commons.future.DefaultResultListener;
 import jadex.commons.future.IFuture;
 import jadex.commons.future.IntermediateDefaultResultListener;
 import jadex.micro.annotation.*;
-import jadex.rules.eca.ChangeInfo;
 import tutorial.GUI.TraderGUI;
+import tutorial.Services.AgentChatService;
 import tutorial.Services.AgentRequestService;
 import tutorial.Services.MarketAgentService;
-import tutorial.Services.AgentChatService;
-import yahoofinance.histquotes.HistoricalQuote;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import static jadex.base.RootComponentConfiguration.GUI;
-
-/**
- * Created by Cenas on 10/19/2016.
- */
 
 @Agent
 @Arguments({
@@ -42,9 +33,8 @@ import static jadex.base.RootComponentConfiguration.GUI;
         @ProvidedService(type=AgentChatService.class),
         @ProvidedService(type=MarketAgentService.class),
 })
-@Description("random agent")
-public class MansoAgentBDI implements MarketAgentService, AgentChatService {
-
+@Description("Passive Agent")
+public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
 
     @Agent
     protected IInternalAccess agent;
@@ -65,7 +55,6 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
 
     protected HashMap<String,Double> followersGains;
 
-    private int numfollowers;
     private int numfollow;
 
     @AgentCreated
@@ -97,8 +86,27 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
         });
     }
 
+    private void buyStock(final String name, final double price, final int numsShares, final int type){
 
-    public IFuture<Void> BuyStockMessage(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price /* 0 for send, 1 for receive */) {
+        //Envia pedido ao mercado para comprar stocks
+        SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
+            public void intermediateResultAvailable(AgentRequestService is) {
+                is.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
+            }
+        });
+
+    }
+
+    private void sellStock(final String name, final double price, final int numsShares, final int type){
+
+        SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
+            public void intermediateResultAvailable(AgentRequestService is) {
+                is.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
+            }
+        });
+    }
+
+    public IFuture<Void> BuyStockMessage(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price) {
         if(agentid == this.agent.getComponentIdentifier()){
             System.out.println("Sou eu, vou ignorar");
             return null;
@@ -140,17 +148,6 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
         return null;
     }
 
-
-    private void buyStock(final String name, final double price, final int numsShares, final int type){
-
-        SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
-            public void intermediateResultAvailable(AgentRequestService is) {
-                is.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
-            }
-        });
-
-    }
-
     public IFuture<Void> SellStockMessage(final IComponentIdentifier agentid, String stockname, final int quantity, final double price) {
         if(agentid == this.agent.getComponentIdentifier()){
             System.out.println("Sou eu, vou ignorar");
@@ -170,6 +167,7 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
                     }
                 });
 
+                //atualiza a GUI
                 updateGUI();
             }
         }
@@ -202,9 +200,7 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
             System.out.flush();
 
             GUI.followerGainsGUI.setModel(listModel);
-
         }
-
         return null;
     }
     public IFuture<Void> UpdateMarketService(ArrayList<HashMap> quote) {
@@ -235,12 +231,36 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
                 }
 
             }else{
-                //nao tem guito para comprar
-                // System.out.println("rip");
+                //nao tem dinheiro para para comprar
                 System.out.println("nao é para mim");
             }
 
         }
+        return null;
+    }
+
+    public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type) {
+        if(stocksOwned.get(stockname)-quantity <= 0) {
+            stocksOwned.remove(stockname);
+        }else{
+
+            stocksOwned.put(stockname, stocksOwned.get(stockname) - quantity);
+
+        }
+
+        money += quantity*price;
+        updateGUI();
+        if(type==1) {
+            SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                public void intermediateResultAvailable(AgentChatService service) {
+                    service.SellStockMessage(agentid, stockname, quantity, price);
+                }
+            });
+            System.out.println("Agent type1 vendeu saldo: "+ money);
+            updateGUI();
+        }
+
+
         return null;
     }
 
@@ -250,7 +270,6 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
         DefaultListModel listModel = new DefaultListModel();
         for (Map.Entry<String, Integer> pair : stocksOwned.entrySet()) {
             listModel.addElement(pair.getKey() + " : " + pair.getValue());
-
         }
 
         GUI.stocksGUI.setModel(listModel);
@@ -281,37 +300,4 @@ public class MansoAgentBDI implements MarketAgentService, AgentChatService {
         return -1;
     }
 
-    private void sellStock(final String name, final double price, final int numsShares, final int type){
-
-        SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
-            public void intermediateResultAvailable(AgentRequestService is) {
-                is.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
-            }
-        });
-    }
-
-    public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type) {
-        if(stocksOwned.get(stockname)-quantity <= 0) {
-            stocksOwned.remove(stockname);
-        }else{
-
-            stocksOwned.put(stockname, stocksOwned.get(stockname) - quantity);
-
-        }
-
-        money += quantity*price;
-        updateGUI();
-        if(type==1) {
-            SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
-                public void intermediateResultAvailable(AgentChatService service) {
-                    service.SellStockMessage(agentid, stockname, quantity, price);
-                }
-            });
-            System.out.println("Agent type1 vendeu saldo: "+ money);
-            updateGUI();
-        }
-
-
-        return null;
-    }
 }
