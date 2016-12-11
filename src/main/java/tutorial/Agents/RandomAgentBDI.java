@@ -81,7 +81,7 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
         following = new ArrayList<IComponentIdentifier>();
         followersGains = new HashMap<String, Double>();
         this.winrate = 0;
-        this.minrate_follow = (Double) agent.getArgument("minRate");
+        this.minrate_follow = 0;
         this.money = (Double) agent.getArgument("money");
         this.numfollow = (Integer) agent.getArgument("numfollow");
     }

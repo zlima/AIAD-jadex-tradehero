@@ -225,11 +225,14 @@ public double searchStockPrice(String symbol){
 public void decisionFunc(){
 
     for (Map.Entry<String, double[]> stock : recordVariationMap.entrySet()) {
+        System.out.println(stock.getValue()[0]);
         if(stock.getValue()[0] >= numVender){
             //vender stocks aqui
+            System.out.println("vender");
             sellStock(stock.getKey(),searchStockPrice(stock.getKey()),5,1, winrate);
         }else if(stock.getValue()[0] <= - numComprar){
             //comprar aqui
+            System.out.println("comprar");
             buyStock(stock.getKey(),searchStockPrice(stock.getKey()),5,1, winrate);
         }
     }
@@ -264,7 +267,6 @@ public void decisionFunc(){
                 }else{
                     stocksOwned.put(stockname,quantity);
                 }
-                System.out.println("Vou comprar");
                 if(type==1) {
                     SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                         public void intermediateResultAvailable(AgentChatService service) {
@@ -288,7 +290,6 @@ public void decisionFunc(){
         }
 
         money += quantity*price;
-        System.out.println("Vou vender");
         updateGUI();
         if(type==1) {
             SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
@@ -307,9 +308,7 @@ public void decisionFunc(){
         }else{
             if (following.size() < numfollow){
                 if(!following.contains(agentid)){
-                    System.out.println("sigo?" + agent_winrate + "<>" + minrate_follow);
                     if(agent_winrate > minrate_follow) {
-                        System.out.println("vou seguir");
                         following.add(agentid);
                         DefaultListModel listModel = new DefaultListModel();
                         for (int i = 0; i < following.size(); i++) {
@@ -325,9 +324,7 @@ public void decisionFunc(){
                         });
                     }
                 }else{
-                    System.out.println("deixo de seguir?" +agent_winrate + "<>" + minrate_follow);
                     if(agent_winrate < minrate_follow) {
-                        System.out.println("vou deixar de seguir");
                         following.remove(agentid);
                         DefaultListModel listModel = new DefaultListModel();
                         for (int i = 0; i < following.size(); i++) {
@@ -346,9 +343,7 @@ public void decisionFunc(){
             }else{
                 //Nao pode seguir mais ninguém
                 if(following.contains(agentid)) {
-                    System.out.println("deixo de seguir?" +agent_winrate + "<>" + minrate_follow);
                     if(agent_winrate < minrate_follow) {
-                        System.out.println("vou deixar de seguir");
                         following.remove(agentid);
                         DefaultListModel listModel = new DefaultListModel();
                         for (int i = 0; i < following.size(); i++) {
@@ -394,9 +389,7 @@ public void decisionFunc(){
                         service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.05);
                     }
                 });
-                System.out.println("deixo de seguir?" +agent_winrate + "<>" + minrate_follow);
                 if(agent_winrate < minrate_follow) {
-                    System.out.println("vou deixar de seguir");
                     following.remove(agentid);
                     DefaultListModel listModel = new DefaultListModel();
                     for (int i = 0; i < following.size(); i++) {
@@ -412,9 +405,7 @@ public void decisionFunc(){
                     });
                 }
             }else{
-                System.out.println("devo seguir?" +agent_winrate + "<>" + minrate_follow);
                 if(agent_winrate > minrate_follow && following.size() < numfollow) {
-                    System.out.println("vou seguir");
                     following.add(agentid);
                     DefaultListModel listModel = new DefaultListModel();
                     for (int i = 0; i < following.size(); i++) {

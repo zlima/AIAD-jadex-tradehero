@@ -86,12 +86,11 @@ public class main {
 
             }
 
-    public static void createNewRand(Double money, int numfollow, Double minrate){
+    public static void createNewRand(Double money, int numfollow){
 
         Map<String, Object> agentArgs = new HashMap<String, Object>();
         agentArgs.put("money", money);
         agentArgs.put("numfollow", numfollow);
-        agentArgs.put("minRate",minrate);
         CreationInfo agentInfo = new CreationInfo(agentArgs);
         listModel.addElement("Adicionado agente Random com " + money + "€ que pode seguir até " + numfollow + " agentes");
         GUI.agentesListGUI.setModel(listModel);
@@ -136,7 +135,7 @@ public class main {
 
         GUI.criarRandomBT.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                createNewRand((Double)GUI.saldoSpinnRand.getValue(),(Integer)GUI.seguirSpinnRand.getValue(), (Double)GUI.minrateSpinnTip.getValue());
+                createNewRand((Double)GUI.saldoSpinnRand.getValue(),(Integer)GUI.seguirSpinnRand.getValue());
             }
         });
     }

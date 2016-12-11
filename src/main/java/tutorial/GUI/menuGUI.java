@@ -28,7 +28,6 @@ public class menuGUI {
     public JSpinner minrateSpinnPassive;
     public JSpinner saldoSpinnRand;
     public JSpinner seguirSpinnRand;
-    public JSpinner minrateSpinnRand;
     SpinnerNumberModel model ;
     SpinnerNumberModel model2 ;
 
@@ -48,8 +47,6 @@ public class menuGUI {
 
         saldoSpinnRand = new JSpinner(model);
         saldoSpinnRand.setValue(999999.0);
-        minrateSpinnRand = new JSpinner(model2);
-        minrateSpinnRand.setValue(1.00);
     }
 
 

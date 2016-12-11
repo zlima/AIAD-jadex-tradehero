@@ -88,6 +88,7 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 GUI.saldoGUI.setText(String.valueOf(money));
                 GUI.winrateGUI.setText(String.valueOf(winrate) + "%");
+                GUI.carteiraGUI.setText(String.valueOf(calcMoney()));
                 f.setVisible(true);
             }
         });
@@ -120,7 +121,8 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
         }
         else{
             if (following.size() < numfollow){
-                if(!following.contains(agentid) && agent_winrate > winrate){
+                if(!following.contains(agentid) && agent_winrate > minrate_follow){
+                    System.out.println(agent_winrate);
                     following.add(agentid);
                     DefaultListModel listModel = new DefaultListModel();
                     for (int i=0; i< following.size();i++) {
@@ -134,7 +136,7 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
                             service.FollowMessage(agentid, agent.getComponentIdentifier());
                         }
                     });
-                }else if(following.contains(agentid) && agent_winrate < winrate){
+                }else if(following.contains(agentid) && agent_winrate < minrate_follow){
                     following.remove(agentid);
                     DefaultListModel listModel = new DefaultListModel();
                     for (int i=0; i< following.size();i++) {
@@ -154,7 +156,7 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
                     System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
                     buyStock(stockname, price, quantity, 0, agent_winrate);
 
-                    if(agent_winrate < winrate){
+                    if(agent_winrate < minrate_follow){
                         following.remove(agentid);
                         DefaultListModel listModel = new DefaultListModel();
                         for (int i=0; i< following.size();i++) {
@@ -199,7 +201,7 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
                     }
                 });
 
-                if(agent_winrate < winrate){
+                if(agent_winrate < minrate_follow){
                     following.remove(agentid);
                     DefaultListModel listModel = new DefaultListModel();
                     for (int i=0; i< following.size();i++) {
@@ -217,7 +219,8 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
                 //atualiza a GUI
                 updateGUI();
             }else{
-                if (following.size() < numfollow && agent_winrate > winrate){
+                if (following.size() < numfollow && agent_winrate > minrate_follow){
+                    System.out.println(agent_winrate);
                         following.add(agentid);
                         DefaultListModel listModel = new DefaultListModel();
                         for (int i=0; i< following.size();i++) {
