@@ -3,12 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="179ea731-f0a3-485d-a83e-b554290b2894" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.jadex/hash.cache" afterPath="$PROJECT_DIR$/.jadex/hash.cache" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/tutorial/Agents/PassiveAgentBDI.java" afterPath="$PROJECT_DIR$/src/main/java/tutorial/Agents/PassiveAgentBDI.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/tutorial/Agents/RandomAgentBDI.java" afterPath="$PROJECT_DIR$/src/main/java/tutorial/Agents/RandomAgentBDI.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/tutorial/Agents/Type1AgentBDI.java" afterPath="$PROJECT_DIR$/src/main/java/tutorial/Agents/Type1AgentBDI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/tutorial/GUI/menuGUI.form" afterPath="$PROJECT_DIR$/src/main/java/tutorial/GUI/menuGUI.form" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/tutorial/GUI/menuGUI.java" afterPath="$PROJECT_DIR$/src/main/java/tutorial/GUI/menuGUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/tutorial/main.java" afterPath="$PROJECT_DIR$/src/main/java/tutorial/main.java" />
     </list>
     <ignored path="jadex-example-project.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,11 +31,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="PassiveAgentBDI.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PassiveAgentBDI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/tutorial/Agents/PassiveAgentBDI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="295">
-              <caret line="90" column="59" selection-start-line="90" selection-start-column="59" selection-end-line="90" selection-end-column="59" />
+            <state relative-caret-position="-2833">
+              <caret line="186" column="54" selection-start-line="186" selection-start-column="54" selection-end-line="186" selection-end-column="54" />
               <folding>
                 <element signature="e#4111#4112#0" expanded="true" />
                 <element signature="e#5183#5474#0" expanded="true" />
@@ -46,23 +44,23 @@
                 <element signature="e#6401#6402#0" expanded="true" />
                 <element signature="e#7325#7634#0" expanded="true" />
                 <element signature="e#7633#7634#0" expanded="true" />
-                <element signature="e#8852#9143#0" expanded="true" />
-                <element signature="e#9142#9143#0" expanded="true" />
-                <element signature="e#9742#10035#0" expanded="true" />
-                <element signature="e#10034#10035#0" expanded="true" />
-                <element signature="e#10849#11156#0" expanded="true" />
-                <element signature="e#11155#11156#0" expanded="true" />
-                <element signature="e#11335#11336#0" expanded="true" />
-                <element signature="e#11362#11363#0" expanded="true" />
-                <element signature="e#11469#11470#0" expanded="true" />
-                <element signature="e#11496#11497#0" expanded="true" />
-                <element signature="e#12431#12432#0" expanded="true" />
-                <element signature="e#12458#12459#0" expanded="true" />
-                <element signature="e#13307#13608#0" expanded="true" />
-                <element signature="e#13607#13608#0" expanded="true" />
-                <element signature="e#14425#14698#0" expanded="true" />
-                <element signature="e#14697#14698#0" expanded="true" />
-                <marker date="1481459878417" expanded="false" signature="3833:3973" ph="(IntermediateDefaultResultListener) intermediateResultAvailable(is) → {" />
+                <element signature="e#8853#9145#0" expanded="true" />
+                <element signature="e#9144#9145#0" expanded="true" />
+                <element signature="e#9744#10037#0" expanded="true" />
+                <element signature="e#10036#10037#0" expanded="true" />
+                <element signature="e#10851#11158#0" expanded="true" />
+                <element signature="e#11157#11158#0" expanded="true" />
+                <element signature="e#11337#11338#0" expanded="true" />
+                <element signature="e#11364#11365#0" expanded="true" />
+                <element signature="e#11471#11472#0" expanded="true" />
+                <element signature="e#11498#11499#0" expanded="true" />
+                <element signature="e#12433#12434#0" expanded="true" />
+                <element signature="e#12460#12461#0" expanded="true" />
+                <element signature="e#13309#13610#0" expanded="true" />
+                <element signature="e#13609#13610#0" expanded="true" />
+                <element signature="e#14427#14700#0" expanded="true" />
+                <element signature="e#14699#14700#0" expanded="true" />
+                <marker date="1481481670596" expanded="false" signature="3833:3973" ph="(IntermediateDefaultResultListener) intermediateResultAvailable(is) → {" />
               </folding>
             </state>
           </provider>
@@ -71,24 +69,24 @@
       <file leaf-file-name="RandomAgentBDI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/tutorial/Agents/RandomAgentBDI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-527">
-              <caret line="86" column="5" selection-start-line="86" selection-start-column="5" selection-end-line="86" selection-end-column="5" />
+            <state relative-caret-position="5185">
+              <caret line="341" column="101" selection-start-line="341" selection-start-column="101" selection-end-line="341" selection-end-column="101" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Type1AgentBDI.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Type1AgentBDI.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/tutorial/Agents/Type1AgentBDI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-221">
-              <caret line="231" column="38" selection-start-line="231" selection-start-column="38" selection-end-line="231" selection-end-column="39" />
+            <state relative-caret-position="3202">
+              <caret line="497" column="18" selection-start-line="497" selection-start-column="12" selection-end-line="497" selection-end-column="18" />
               <folding>
                 <element signature="e#3402#3916#0" expanded="true" />
                 <element signature="e#3915#3916#0" expanded="true" />
-                <element signature="e#11944#12223#0" expanded="true" />
-                <element signature="e#12222#12223#0" expanded="true" />
-                <marker date="1481459408260" expanded="false" signature="13098:13249" ph="(IntermediateDefaultResultListener) intermediateResultAvailable(service) → {" />
+                <element signature="e#11810#12089#0" expanded="true" />
+                <element signature="e#12088#12089#0" expanded="true" />
+                <marker date="1481482618845" expanded="false" signature="12964:13115" ph="(IntermediateDefaultResultListener) intermediateResultAvailable(service) → {" />
               </folding>
             </state>
           </provider>
@@ -202,12 +200,12 @@
         <option value="$PROJECT_DIR$/src/main/java/tutorial/Agents/MarketAgentBDI.java" />
         <option value="$PROJECT_DIR$/src/main/java/tutorial/GUI/TraderGUI.form" />
         <option value="$PROJECT_DIR$/src/main/java/tutorial/GUI/TraderGUI.java" />
-        <option value="$PROJECT_DIR$/src/main/java/tutorial/Agents/RandomAgentBDI.java" />
         <option value="$PROJECT_DIR$/src/main/java/tutorial/GUI/menuGUI.java" />
         <option value="$PROJECT_DIR$/src/main/java/tutorial/GUI/menuGUI.form" />
         <option value="$PROJECT_DIR$/src/main/java/tutorial/main.java" />
-        <option value="$PROJECT_DIR$/src/main/java/tutorial/Agents/Type1AgentBDI.java" />
+        <option value="$PROJECT_DIR$/src/main/java/tutorial/Agents/RandomAgentBDI.java" />
         <option value="$PROJECT_DIR$/src/main/java/tutorial/Agents/PassiveAgentBDI.java" />
+        <option value="$PROJECT_DIR$/src/main/java/tutorial/Agents/Type1AgentBDI.java" />
       </list>
     </option>
   </component>
@@ -816,7 +814,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="0" width="1370" height="772" extended-state="0" />
+    <frame x="-8" y="0" width="1370" height="772" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1088,32 +1086,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/tutorial/Agents/RandomAgentBDI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-527">
-          <caret line="86" column="5" selection-start-line="86" selection-start-column="5" selection-end-line="86" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/tutorial/Agents/Type1AgentBDI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-221">
-          <caret line="231" column="38" selection-start-line="231" selection-start-column="38" selection-end-line="231" selection-end-column="39" />
-          <folding>
-            <element signature="e#3402#3916#0" expanded="true" />
-            <element signature="e#3915#3916#0" expanded="true" />
-            <element signature="e#11944#12223#0" expanded="true" />
-            <element signature="e#12222#12223#0" expanded="true" />
-            <marker date="1481459408260" expanded="false" signature="13098:13249" ph="(IntermediateDefaultResultListener) intermediateResultAvailable(service) → {" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/tutorial/Agents/PassiveAgentBDI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="90" column="59" selection-start-line="90" selection-start-column="59" selection-end-line="90" selection-end-column="59" />
+        <state relative-caret-position="-2833">
+          <caret line="186" column="54" selection-start-line="186" selection-start-column="54" selection-end-line="186" selection-end-column="54" />
           <folding>
             <element signature="e#4111#4112#0" expanded="true" />
             <element signature="e#5183#5474#0" expanded="true" />
@@ -1122,23 +1098,45 @@
             <element signature="e#6401#6402#0" expanded="true" />
             <element signature="e#7325#7634#0" expanded="true" />
             <element signature="e#7633#7634#0" expanded="true" />
-            <element signature="e#8852#9143#0" expanded="true" />
-            <element signature="e#9142#9143#0" expanded="true" />
-            <element signature="e#9742#10035#0" expanded="true" />
-            <element signature="e#10034#10035#0" expanded="true" />
-            <element signature="e#10849#11156#0" expanded="true" />
-            <element signature="e#11155#11156#0" expanded="true" />
-            <element signature="e#11335#11336#0" expanded="true" />
-            <element signature="e#11362#11363#0" expanded="true" />
-            <element signature="e#11469#11470#0" expanded="true" />
-            <element signature="e#11496#11497#0" expanded="true" />
-            <element signature="e#12431#12432#0" expanded="true" />
-            <element signature="e#12458#12459#0" expanded="true" />
-            <element signature="e#13307#13608#0" expanded="true" />
-            <element signature="e#13607#13608#0" expanded="true" />
-            <element signature="e#14425#14698#0" expanded="true" />
-            <element signature="e#14697#14698#0" expanded="true" />
-            <marker date="1481459878417" expanded="false" signature="3833:3973" ph="(IntermediateDefaultResultListener) intermediateResultAvailable(is) → {" />
+            <element signature="e#8853#9145#0" expanded="true" />
+            <element signature="e#9144#9145#0" expanded="true" />
+            <element signature="e#9744#10037#0" expanded="true" />
+            <element signature="e#10036#10037#0" expanded="true" />
+            <element signature="e#10851#11158#0" expanded="true" />
+            <element signature="e#11157#11158#0" expanded="true" />
+            <element signature="e#11337#11338#0" expanded="true" />
+            <element signature="e#11364#11365#0" expanded="true" />
+            <element signature="e#11471#11472#0" expanded="true" />
+            <element signature="e#11498#11499#0" expanded="true" />
+            <element signature="e#12433#12434#0" expanded="true" />
+            <element signature="e#12460#12461#0" expanded="true" />
+            <element signature="e#13309#13610#0" expanded="true" />
+            <element signature="e#13609#13610#0" expanded="true" />
+            <element signature="e#14427#14700#0" expanded="true" />
+            <element signature="e#14699#14700#0" expanded="true" />
+            <marker date="1481481670596" expanded="false" signature="3833:3973" ph="(IntermediateDefaultResultListener) intermediateResultAvailable(is) → {" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/tutorial/Agents/RandomAgentBDI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5185">
+          <caret line="341" column="101" selection-start-line="341" selection-start-column="101" selection-end-line="341" selection-end-column="101" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/tutorial/Agents/Type1AgentBDI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3202">
+          <caret line="497" column="18" selection-start-line="497" selection-start-column="12" selection-end-line="497" selection-end-column="18" />
+          <folding>
+            <element signature="e#3402#3916#0" expanded="true" />
+            <element signature="e#3915#3916#0" expanded="true" />
+            <element signature="e#11810#12089#0" expanded="true" />
+            <element signature="e#12088#12089#0" expanded="true" />
+            <marker date="1481482618845" expanded="false" signature="12964:13115" ph="(IntermediateDefaultResultListener) intermediateResultAvailable(service) → {" />
           </folding>
         </state>
       </provider>

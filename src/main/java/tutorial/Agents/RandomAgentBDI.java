@@ -210,7 +210,7 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
 
         GUI.stocksGUI.setModel(listModel);
 
-        winrate = -(100 - (calcMoney() *100) / (Double) agent.getArgument("money"));
+        winrate = ((calcMoney() *100) / (Double) agent.getArgument("money")-100);
         GUI.winrateGUI.setText(String.valueOf(winrate) + "%");
         GUI.carteiraGUI.setText(String.valueOf(calcMoney()));
     }
@@ -335,11 +335,11 @@ public class RandomAgentBDI implements MarketAgentService, AgentChatService {
             if(following.contains(agentid)){
                 //vender e mandar dinhiro
                 sellStock(stockname,price,quantity,0, agent_winrate);
-                this.money -= quantity*price*0.05;
+                this.money -= quantity*price*0.005;
                 //enviar dinheiro
                 SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                     public void intermediateResultAvailable(AgentChatService service) {
-                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.05);
+                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.005);
                     }
                 });
             }

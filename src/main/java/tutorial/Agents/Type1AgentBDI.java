@@ -225,14 +225,11 @@ public double searchStockPrice(String symbol){
 public void decisionFunc(){
 
     for (Map.Entry<String, double[]> stock : recordVariationMap.entrySet()) {
-        System.out.println(stock.getValue()[0]);
         if(stock.getValue()[0] >= numVender){
             //vender stocks aqui
-            System.out.println("vender");
             sellStock(stock.getKey(),searchStockPrice(stock.getKey()),5,1, winrate);
         }else if(stock.getValue()[0] <= - numComprar){
             //comprar aqui
-            System.out.println("comprar");
             buyStock(stock.getKey(),searchStockPrice(stock.getKey()),5,1, winrate);
         }
     }
@@ -382,11 +379,11 @@ public void decisionFunc(){
             if(following.contains(agentid)){
                 //vender e mandar dinhiro
                 sellStock(stockname,price,quantity,0, agent_winrate);
-                this.money -= quantity*price*0.05;
+                this.money -= quantity*price*0.005;
                 //enviar dinheiro
                 SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                     public void intermediateResultAvailable(AgentChatService service) {
-                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.05);
+                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.005);
                     }
                 });
                 if(agent_winrate < minrate_follow) {
@@ -428,7 +425,6 @@ public void decisionFunc(){
     public IFuture<Void> FollowMessage(IComponentIdentifier agentid, IComponentIdentifier followerid) {
         if(agentid == this.agent.getComponentIdentifier()){
             if(!followers.contains(followerid)){
-                System.out.println("Adicionando seguidor");
                 followers.add(followerid);
             }
             DefaultListModel listModel = new DefaultListModel();
@@ -447,7 +443,6 @@ public void decisionFunc(){
     public IFuture<Void> UnfollowMessage(IComponentIdentifier agentid, IComponentIdentifier followerid) {
         if(agentid == this.agent.getComponentIdentifier()){
             if(followers.contains(followerid)){
-                System.out.println("Removendo seguidor");
                 followers.remove(followerid);
             }
             DefaultListModel listModel = new DefaultListModel();
@@ -481,7 +476,7 @@ public void decisionFunc(){
 
         GUI.stocksGUI.setModel(listModel);
 
-        winrate = -(100 - (calcMoney() *100) / (Double) agent.getArgument("money"));
+        winrate = ((calcMoney() *100) / (Double) agent.getArgument("money")-100);
         GUI.winrateGUI.setText(String.valueOf(winrate) + "%");
         GUI.carteiraGUI.setText(String.valueOf(calcMoney()));
     }
