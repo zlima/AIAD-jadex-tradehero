@@ -19,7 +19,9 @@ import tutorial.Services.MarketAgentService;
 import yahoofinance.histquotes.HistoricalQuote;
 
 import javax.swing.*;
+import javax.xml.bind.SchemaOutputResolver;
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +43,8 @@ import java.util.Map;
 public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
 
     private double money; //dinheiro do agent
+    private double minrate_follow;
+    private double winrate;
     private Map<String,Integer> stocksOwned;
     private Map<String,Integer> stockHist;
 
@@ -85,6 +89,8 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
         followers = new ArrayList<IComponentIdentifier>();
         following = new ArrayList<IComponentIdentifier>();
         followersGains = new HashMap<String, Double>();
+        this.winrate = 0;
+        this.minrate_follow = (Double) agent.getArgument("minRate");
         this.money = (Double) agent.getArgument("money");
         this.numfollow = (Integer) agent.getArgument("numfollow");
         this.numComprar = (Integer) agent.getArgument("numComprar");
@@ -101,6 +107,7 @@ public class Type1AgentBDI implements MarketAgentService, AgentChatService  {
                 f.setContentPane(GUI.panel1);
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 GUI.saldoGUI.setText(String.valueOf(money));
+                GUI.winrateGUI.setText(String.valueOf(winrate) + "%");
                 f.setVisible(true);
             }
         });
@@ -220,36 +227,33 @@ public void decisionFunc(){
     for (Map.Entry<String, double[]> stock : recordVariationMap.entrySet()) {
         if(stock.getValue()[0] >= numVender){
             //vender stocks aqui
-            sellStock(stock.getKey(),searchStockPrice(stock.getKey()),5,1);
+            sellStock(stock.getKey(),searchStockPrice(stock.getKey()),5,1, winrate);
         }else if(stock.getValue()[0] <= - numComprar){
             //comprar aqui
-            buyStock(stock.getKey(),searchStockPrice(stock.getKey()),5,1);
+            buyStock(stock.getKey(),searchStockPrice(stock.getKey()),5,1, winrate);
         }
     }
 }
 
-    private void buyStock(final String name, final double price, final int numsShares, final int type){
-
+    private void buyStock(final String name, final double price, final int numsShares, final int type, final double agent_winrate){
         SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
             public void intermediateResultAvailable(AgentRequestService is) {
-                is.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
+                is.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price, type, agent_winrate);
             }
         });
     }
 
-    private void sellStock(final String name, final double price, final int numsShares, final int type){
-
+    private void sellStock(final String name, final double price, final int numsShares, final int type, final double agent_winrate){
         SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
             public void intermediateResultAvailable(AgentRequestService is) {
-                is.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
+                is.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price, type, agent_winrate);
             }
         });
     }
 
-    public IFuture<Void> ConfirmStockBuy(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type) {
+    public IFuture<Void> ConfirmStockBuy(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type,final double agent_winrate) {
         if(agentid == this.agent.getComponentIdentifier()) { //confirmaçao do mercado
             if(money >= quantity*price){
-
                 money -= quantity*price;
 
                 stockHist.put(stockname,quantity);
@@ -260,23 +264,23 @@ public void decisionFunc(){
                 }else{
                     stocksOwned.put(stockname,quantity);
                 }
-
+                System.out.println("Vou comprar");
                 if(type==1) {
                     SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                         public void intermediateResultAvailable(AgentChatService service) {
-                            service.BuyStockMessage(agentid,stockname,quantity,price);
+                            service.BuyStockMessage(agentid,stockname,quantity,price, agent_winrate);
                         }
                     });
                     updateGUI();
                 }
             }else{
-                System.out.println("nao é para mim");
+                //System.out.println("nao é para mim");
             }
         }
         return null;
     }
 
-    public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type) {
+    public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type, final double agent_winrate) {
         if(stocksOwned.get(stockname)-quantity <= 0) {
             stocksOwned.remove(stockname);
         }else{
@@ -284,28 +288,136 @@ public void decisionFunc(){
         }
 
         money += quantity*price;
+        System.out.println("Vou vender");
         updateGUI();
         if(type==1) {
             SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                 public void intermediateResultAvailable(AgentChatService service) {
-                    service.SellStockMessage(agentid,stockname,quantity,price);
+                    service.SellStockMessage(agentid,stockname,quantity,price, agent_winrate);
                 }
             });
         }
         return null;
     }
 
-    public IFuture<Void> BuyStockMessage(final IComponentIdentifier agentid, String stockname, int quantity, double price /* 0 for send, 1 for receive */) {
+    public IFuture<Void> BuyStockMessage(final IComponentIdentifier agentid, String stockname, int quantity, double price, double agent_winrate /* 0 for send, 1 for receive */) {
         if(agentid == this.agent.getComponentIdentifier()){
            //System.out.println("Sou eu, vou ignorar");
             return null;
-        }
-        else{
+        }else{
             if (following.size() < numfollow){
                 if(!following.contains(agentid)){
+                    System.out.println("sigo?" + agent_winrate + "<>" + minrate_follow);
+                    if(agent_winrate > minrate_follow) {
+                        System.out.println("vou seguir");
+                        following.add(agentid);
+                        DefaultListModel listModel = new DefaultListModel();
+                        for (int i = 0; i < following.size(); i++) {
+                            listModel.addElement(following.get(i));
+                        }
+
+                        GUI.seguirList.setModel(listModel);
+                        //Enviar mensagem a dizer que está a seguir
+                        SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                            public void intermediateResultAvailable(AgentChatService service) {
+                                service.FollowMessage(agentid, agent.getComponentIdentifier());
+                            }
+                        });
+                    }
+                }else{
+                    System.out.println("deixo de seguir?" +agent_winrate + "<>" + minrate_follow);
+                    if(agent_winrate < minrate_follow) {
+                        System.out.println("vou deixar de seguir");
+                        following.remove(agentid);
+                        DefaultListModel listModel = new DefaultListModel();
+                        for (int i = 0; i < following.size(); i++) {
+                            listModel.addElement(following.get(i));
+                        }
+
+                        GUI.seguirList.setModel(listModel);
+                        //Enviar mensagem a dizer que deixou de seguir
+                        SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                            public void intermediateResultAvailable(AgentChatService service) {
+                                service.UnfollowMessage(agentid, agent.getComponentIdentifier());
+                            }
+                        });
+                    }
+                }
+            }else{
+                //Nao pode seguir mais ninguém
+                if(following.contains(agentid)) {
+                    System.out.println("deixo de seguir?" +agent_winrate + "<>" + minrate_follow);
+                    if(agent_winrate < minrate_follow) {
+                        System.out.println("vou deixar de seguir");
+                        following.remove(agentid);
+                        DefaultListModel listModel = new DefaultListModel();
+                        for (int i = 0; i < following.size(); i++) {
+                            listModel.addElement(following.get(i));
+                        }
+
+                        GUI.seguirList.setModel(listModel);
+                        //Enviar mensagem a dizer que deixou de seguir
+                        SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                            public void intermediateResultAvailable(AgentChatService service) {
+                                service.UnfollowMessage(agentid, agent.getComponentIdentifier());
+                            }
+                        });
+
+                    }else {
+                        System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
+                        buyStock(stockname, price, quantity, 0, agent_winrate);
+                    }
+                }
+                return null;
+            }
+            if(following.contains(agentid)) {
+                System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
+                buyStock(stockname, price, quantity, 0, agent_winrate);
+            }
+        }
+        return null;
+    }
+
+    public IFuture<Void> SellStockMessage(final IComponentIdentifier agentid, String stockname, final int quantity, final double price, final double agent_winrate) {
+        if(agentid == this.agent.getComponentIdentifier()){
+            //System.out.println("Sou eu, vou ignorar");
+            return null;
+        }
+        else {
+            if(following.contains(agentid)){
+                //vender e mandar dinhiro
+                sellStock(stockname,price,quantity,0, agent_winrate);
+                this.money -= quantity*price*0.05;
+                //enviar dinheiro
+                SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                    public void intermediateResultAvailable(AgentChatService service) {
+                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.05);
+                    }
+                });
+                System.out.println("deixo de seguir?" +agent_winrate + "<>" + minrate_follow);
+                if(agent_winrate < minrate_follow) {
+                    System.out.println("vou deixar de seguir");
+                    following.remove(agentid);
+                    DefaultListModel listModel = new DefaultListModel();
+                    for (int i = 0; i < following.size(); i++) {
+                        listModel.addElement(following.get(i));
+                    }
+
+                    GUI.seguirList.setModel(listModel);
+                    //Enviar mensagem a dizer que deixou de seguir
+                    SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                        public void intermediateResultAvailable(AgentChatService service) {
+                            service.UnfollowMessage(agentid, agent.getComponentIdentifier());
+                        }
+                    });
+                }
+            }else{
+                System.out.println("devo seguir?" +agent_winrate + "<>" + minrate_follow);
+                if(agent_winrate > minrate_follow && following.size() < numfollow) {
+                    System.out.println("vou seguir");
                     following.add(agentid);
                     DefaultListModel listModel = new DefaultListModel();
-                    for (int i=0; i< following.size();i++) {
+                    for (int i = 0; i < following.size(); i++) {
                         listModel.addElement(following.get(i));
                     }
 
@@ -317,42 +429,6 @@ public void decisionFunc(){
                         }
                     });
                 }
-                else{
-
-                }
-            }
-            else{
-                System.out.println("Nao podes seguir mais ninguém");
-                if(following.contains(agentid)) {
-                    System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
-                    buyStock(stockname, price, quantity, 0);
-                }
-                return null;
-            }
-            if(following.contains(agentid)) {
-                System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
-                buyStock(stockname, price, quantity, 0);
-            }
-        }
-        return null;
-    }
-
-    public IFuture<Void> SellStockMessage(final IComponentIdentifier agentid, String stockname, final int quantity, final double price) {
-        if(agentid == this.agent.getComponentIdentifier()){
-            //System.out.println("Sou eu, vou ignorar");
-            return null;
-        }
-        else {
-            if(following.contains(agentid)){
-                //vender e mandar dinhiro
-                sellStock(stockname,price,quantity,0);
-                this.money -= quantity*price*0.30;
-                //enviar dinheiro
-                SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
-                    public void intermediateResultAvailable(AgentChatService service) {
-                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.30);
-                    }
-                });
             }
         }
         return null;
@@ -361,6 +437,7 @@ public void decisionFunc(){
     public IFuture<Void> FollowMessage(IComponentIdentifier agentid, IComponentIdentifier followerid) {
         if(agentid == this.agent.getComponentIdentifier()){
             if(!followers.contains(followerid)){
+                System.out.println("Adicionando seguidor");
                 followers.add(followerid);
             }
             DefaultListModel listModel = new DefaultListModel();
@@ -379,6 +456,7 @@ public void decisionFunc(){
     public IFuture<Void> UnfollowMessage(IComponentIdentifier agentid, IComponentIdentifier followerid) {
         if(agentid == this.agent.getComponentIdentifier()){
             if(followers.contains(followerid)){
+                System.out.println("Removendo seguidor");
                 followers.remove(followerid);
             }
             DefaultListModel listModel = new DefaultListModel();
@@ -387,9 +465,6 @@ public void decisionFunc(){
             }
 
             GUI.seguidoresList.setModel(listModel);
-        }
-        else{
-            //O agentid deixou de seguir o followerid
         }
         return null;
     }
@@ -415,6 +490,8 @@ public void decisionFunc(){
 
         GUI.stocksGUI.setModel(listModel);
 
+        winrate = -(100 - (calcMoney() *100) / (Double) agent.getArgument("money"));
+        GUI.winrateGUI.setText(String.valueOf(winrate) + "%");
         GUI.carteiraGUI.setText(String.valueOf(calcMoney()));
     }
 

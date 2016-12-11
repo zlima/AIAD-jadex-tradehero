@@ -183,34 +183,34 @@ public class MarketAgentBDI implements AgentRequestService {
         service.UpdateMarketService(message);
     }
 
-    public IFuture<Void> ConfirmStockBuy(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price,final int type){
+    public IFuture<Void> ConfirmStockBuy(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price,final int type, final double agent_winrate){
         SServiceProvider.getServices(agent.getServiceProvider(), MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<MarketAgentService>() {
             public void intermediateResultAvailable(MarketAgentService is) {
-                is.ConfirmStockBuy(agentid, stockname, quantity, price, type);
+                is.ConfirmStockBuy(agentid, stockname, quantity, price, type, agent_winrate);
             }
         });
         return null;
     }
 
-    public IFuture<Void> BuyStocksRequest(IComponentIdentifier agentid, String stockname, int quantity, double price,final int type) {
+    public IFuture<Void> BuyStocksRequest(IComponentIdentifier agentid, String stockname, int quantity, double price,final int type, final double agent_winrate) {
 
         if(!openstatus) {
             if (Market.get(stockname).get(Market.get(stockname).size()-1).getOpen().doubleValue() == price) {
-                ConfirmStockBuy(agentid, stockname, quantity, price,type);
+                ConfirmStockBuy(agentid, stockname, quantity, price,type, agent_winrate);
             }
         }
         else{
             if (Market.get(stockname).get(Market.get(stockname).size()-2).getClose().doubleValue() == price) {
-                ConfirmStockBuy(agentid, stockname, quantity, price,type);
+                ConfirmStockBuy(agentid, stockname, quantity, price,type, agent_winrate);
             }
         }
         return null;
     }
 
-    public IFuture<Void> SellStockRequest(IComponentIdentifier agentid, String stockname, int quantity, double price,final int type) {
+    public IFuture<Void> SellStockRequest(IComponentIdentifier agentid, String stockname, int quantity, double price,final int type, final double agent_winrate) {
         if(!openstatus) {
             if (Market.get(stockname).get(Market.get(stockname).size()-1).getOpen().doubleValue() == price) {
-                ConfirmStockSell(agentid, stockname, quantity, price,type);
+                ConfirmStockSell(agentid, stockname, quantity, price,type, agent_winrate);
             }
             else {
                 System.out.println("Demoraste muito a vender!");
@@ -218,7 +218,7 @@ public class MarketAgentBDI implements AgentRequestService {
         }
         else{
             if (Market.get(stockname).get(Market.get(stockname).size()-2).getClose().doubleValue() == price)
-                ConfirmStockSell(agentid, stockname, quantity, price, type);
+                ConfirmStockSell(agentid, stockname, quantity, price, type, agent_winrate);
             else
                 System.out.println("Demoraste muito a vender!2");
         }
@@ -226,10 +226,10 @@ public class MarketAgentBDI implements AgentRequestService {
         return null;
     }
 
-    public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type){
+    public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type, final double agent_winrate){
         SServiceProvider.getServices(agent.getServiceProvider(), MarketAgentService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<MarketAgentService>() {
             public void intermediateResultAvailable(MarketAgentService is) {
-                is.ConfirmStockSell(agentid, stockname, quantity, price,type);
+                is.ConfirmStockSell(agentid, stockname, quantity, price,type, agent_winrate);
             }
         });
         return null;

@@ -49,6 +49,10 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
 
     private Map<String,Integer> stocksOwned;
 
+    private double minrate_follow;
+
+    private double winrate;
+
     private double money;
 
     private TraderGUI GUI;
@@ -66,6 +70,8 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
          stockValues = new ArrayList<ArrayList<HashMap>>();
         stocksOwned = new HashMap<String, Integer>();
         followersGains = new HashMap<String,Double>();
+        this.winrate = 0;
+        this.minrate_follow = (Double) agent.getArgument("minRate");
         this.money = (Double) agent.getArgument("money");
         this.numfollow = (Integer) agent.getArgument("numfollow");
     }
@@ -81,39 +87,40 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
                 f.setContentPane(GUI.panel1);
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 GUI.saldoGUI.setText(String.valueOf(money));
+                GUI.winrateGUI.setText(String.valueOf(winrate) + "%");
                 f.setVisible(true);
             }
         });
     }
 
-    private void buyStock(final String name, final double price, final int numsShares, final int type){
+    private void buyStock(final String name, final double price, final int numsShares, final int type, final double agent_winrate){
 
         //Envia pedido ao mercado para comprar stocks
         SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
             public void intermediateResultAvailable(AgentRequestService is) {
-                is.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
+                is.BuyStocksRequest(agent.getComponentIdentifier(), name, numsShares, price, type, agent_winrate);
             }
         });
 
     }
 
-    private void sellStock(final String name, final double price, final int numsShares, final int type){
+    private void sellStock(final String name, final double price, final int numsShares, final int type, final double agent_winrate){
 
         SServiceProvider.getServices(agent.getServiceProvider(), AgentRequestService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentRequestService>() {
             public void intermediateResultAvailable(AgentRequestService is) {
-                is.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price, type);
+                is.SellStockRequest(agent.getComponentIdentifier(), name, numsShares, price, type, agent_winrate);
             }
         });
     }
 
-    public IFuture<Void> BuyStockMessage(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price) {
+    public IFuture<Void> BuyStockMessage(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final double agent_winrate) {
         if(agentid == this.agent.getComponentIdentifier()){
             System.out.println("Sou eu, vou ignorar");
             return null;
         }
         else{
             if (following.size() < numfollow){
-                if(!following.contains(agentid)){
+                if(!following.contains(agentid) && agent_winrate > winrate){
                     following.add(agentid);
                     DefaultListModel listModel = new DefaultListModel();
                     for (int i=0; i< following.size();i++) {
@@ -127,28 +134,53 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
                             service.FollowMessage(agentid, agent.getComponentIdentifier());
                         }
                     });
+                }else if(following.contains(agentid) && agent_winrate < winrate){
+                    following.remove(agentid);
+                    DefaultListModel listModel = new DefaultListModel();
+                    for (int i=0; i< following.size();i++) {
+                        listModel.addElement(following.get(i));
+                    }
+
+                    GUI.seguirList.setModel(listModel);
+                    //Enviar mensagem a dizer que está a seguir
+                    SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                        public void intermediateResultAvailable(AgentChatService service) {
+                            service.UnfollowMessage(agentid, agent.getComponentIdentifier());
+                        }
+                    });
                 }
-                else{
-                   // System.out.println("Ja o estas a seguir");
-                }
-            }
-            else{
-                System.out.println("Nao podes seguir mais ninguém");
+            }else{
                 if(following.contains(agentid)) {
                     System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
-                    buyStock(stockname, price, quantity, 0);
+                    buyStock(stockname, price, quantity, 0, agent_winrate);
+
+                    if(agent_winrate < winrate){
+                        following.remove(agentid);
+                        DefaultListModel listModel = new DefaultListModel();
+                        for (int i=0; i< following.size();i++) {
+                            listModel.addElement(following.get(i));
+                        }
+
+                        GUI.seguirList.setModel(listModel);
+                        //Enviar mensagem a dizer que está a seguir
+                        SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                            public void intermediateResultAvailable(AgentChatService service) {
+                                service.UnfollowMessage(agentid, agent.getComponentIdentifier());
+                            }
+                        });
+                    }
                 }
                 return null;
             }
             if(following.contains(agentid)) {
                 System.out.println("O agente com o id " + agentid + " comprou " + quantity + " stocks de " + stockname);
-                buyStock(stockname, price, quantity, 0);
+                buyStock(stockname, price, quantity, 0, agent_winrate);
             }
         }
         return null;
     }
 
-    public IFuture<Void> SellStockMessage(final IComponentIdentifier agentid, String stockname, final int quantity, final double price) {
+    public IFuture<Void> SellStockMessage(final IComponentIdentifier agentid, String stockname, final int quantity, final double price, final double agent_winrate) {
         if(agentid == this.agent.getComponentIdentifier()){
             System.out.println("Sou eu, vou ignorar");
             return null;
@@ -157,18 +189,49 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
             System.out.println("O agente com o id " + agentid + " vendeu " + quantity + " stocks de " + stockname);
             if(following.contains(agentid)){
                 //vender e mandar dinhiro
-                sellStock(stockname,price,quantity,0);
-                this.money -= quantity*price*0.30;
+                sellStock(stockname,price,quantity,0, agent_winrate);
+                this.money -= quantity*price*0.05;
 
                 //enviar dinheiro
                 SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                     public void intermediateResultAvailable(AgentChatService service) {
-                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.30);
+                        service.sendMoney(agentid, agent.getComponentIdentifier(),quantity*price*0.05);
                     }
                 });
 
+                if(agent_winrate < winrate){
+                    following.remove(agentid);
+                    DefaultListModel listModel = new DefaultListModel();
+                    for (int i=0; i< following.size();i++) {
+                        listModel.addElement(following.get(i));
+                    }
+
+                    GUI.seguirList.setModel(listModel);
+                    //Enviar mensagem a dizer que está a seguir
+                    SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                        public void intermediateResultAvailable(AgentChatService service) {
+                            service.UnfollowMessage(agentid, agent.getComponentIdentifier());
+                        }
+                    });
+                }
                 //atualiza a GUI
                 updateGUI();
+            }else{
+                if (following.size() < numfollow && agent_winrate > winrate){
+                        following.add(agentid);
+                        DefaultListModel listModel = new DefaultListModel();
+                        for (int i=0; i< following.size();i++) {
+                            listModel.addElement(following.get(i));
+                        }
+
+                        GUI.seguirList.setModel(listModel);
+                        //Enviar mensagem a dizer que está a seguir
+                        SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
+                            public void intermediateResultAvailable(AgentChatService service) {
+                                service.FollowMessage(agentid, agent.getComponentIdentifier());
+                            }
+                        });
+                    }
             }
         }
         return null;
@@ -207,7 +270,7 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
         return null;
     }
 
-    public IFuture<Void> ConfirmStockBuy(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type) {
+    public IFuture<Void> ConfirmStockBuy(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type, final double agent_winrate) {
         if(agentid == this.agent.getComponentIdentifier()) { //confirmaçao do mercado
             if(money >= quantity*price){
 
@@ -225,7 +288,7 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
                 if(type==1) {
                     SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                         public void intermediateResultAvailable(AgentChatService service) {
-                            service.BuyStockMessage(agentid,stockname,quantity,price);
+                            service.BuyStockMessage(agentid,stockname,quantity,price, agent_winrate);
                         }
                     });
                 }
@@ -239,7 +302,7 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
         return null;
     }
 
-    public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type) {
+    public IFuture<Void> ConfirmStockSell(final IComponentIdentifier agentid, final String stockname, final int quantity, final double price, final int type, final double agent_winrate) {
         if(stocksOwned.get(stockname)-quantity <= 0) {
             stocksOwned.remove(stockname);
         }else{
@@ -253,7 +316,7 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
         if(type==1) {
             SServiceProvider.getServices(agent.getServiceProvider(), AgentChatService.class, RequiredServiceInfo.SCOPE_PLATFORM).addResultListener(new IntermediateDefaultResultListener<AgentChatService>() {
                 public void intermediateResultAvailable(AgentChatService service) {
-                    service.SellStockMessage(agentid, stockname, quantity, price);
+                    service.SellStockMessage(agentid, stockname, quantity, price, agent_winrate);
                 }
             });
             System.out.println("Agent type1 vendeu saldo: "+ money);
@@ -274,6 +337,8 @@ public class PassiveAgentBDI implements MarketAgentService, AgentChatService {
 
         GUI.stocksGUI.setModel(listModel);
 
+        winrate = -(100 - (calcMoney() *100) / (Double) agent.getArgument("money"));
+        GUI.winrateGUI.setText(String.valueOf(winrate) + "%");
         GUI.carteiraGUI.setText(String.valueOf(calcMoney()));
     }
 

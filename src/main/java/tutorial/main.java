@@ -33,6 +33,7 @@ public class main {
     static IComponentManagementService cms;
     static ThreadSuspendable sus;
     static menuGUI GUI;
+    static DefaultListModel listModel;
 
     public static void main(String[] args) throws IOException {
         init();
@@ -42,6 +43,7 @@ public class main {
         public static void init(){
             GUI = new menuGUI();
             initGUI();
+            listModel = new DefaultListModel();
 
             // Jadex jadex = new Jadex();
             String[] defargs = new String[] {
@@ -71,37 +73,44 @@ public class main {
             cms.createComponent("tutorial.Agents.MarketAgentBDI.class",null).getFirstResult(sus);
         }
 
-            public static void createNewPassive(Double money, int numfollow){
+            public static void createNewPassive(Double money, int numfollow, Double minrate){
 
                 Map<String, Object> agentArgs = new HashMap<String, Object>();
                 agentArgs.put("money", money);
                 agentArgs.put("numfollow", numfollow);
+                agentArgs.put("minRate",minrate);
                 CreationInfo agentInfo = new CreationInfo(agentArgs);
-
+                listModel.addElement("Adicionado agente Passivo com " + money + "€ que pode seguir até " + numfollow + " agentes");
+                GUI.agentesListGUI.setModel(listModel);
                 cms.createComponent("tutorial.Agents.PassiveAgentBDI.class", agentInfo).getFirstResult(sus);
 
             }
 
-    public static void createNewRand(Double money, int numfollow){
+    public static void createNewRand(Double money, int numfollow, Double minrate){
 
         Map<String, Object> agentArgs = new HashMap<String, Object>();
         agentArgs.put("money", money);
         agentArgs.put("numfollow", numfollow);
+        agentArgs.put("minRate",minrate);
         CreationInfo agentInfo = new CreationInfo(agentArgs);
-
+        listModel.addElement("Adicionado agente Random com " + money + "€ que pode seguir até " + numfollow + " agentes");
+        GUI.agentesListGUI.setModel(listModel);
         cms.createComponent("tutorial.Agents.RandomAgentBDI.class", agentInfo).getFirstResult(sus);
     }
 
 
-    public static void createNewTip1(Double money, int numfollow, int numComprar, int numVender){
+    public static void createNewTip1(Double money, int numfollow, int numComprar, int numVender, Double minrate){
 
         Map<String, Object> agentArgs = new HashMap<String, Object>();
         agentArgs.put("money", money);
         agentArgs.put("numfollow", numfollow);
         agentArgs.put("numComprar",numComprar);
         agentArgs.put("numVender",numVender);
+        agentArgs.put("minRate",minrate);
 
         CreationInfo agentInfo = new CreationInfo(agentArgs);
+        listModel.addElement("Adicionado agente do Tipo 1 com " + money + "€ que pode seguir até " + numfollow + " agentes");
+        GUI.agentesListGUI.setModel(listModel);
 
         cms.createComponent("tutorial.Agents.Type1AgentBDI.class", agentInfo).getFirstResult(sus);
         System.out.println(cms.getComponentIdentifiers().get());
@@ -115,19 +124,19 @@ public class main {
         GUI.criarButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 createNewTip1((Double)GUI.saldoSpinnTip.getValue(),(Integer)GUI.seguirSpinnTip.getValue(),
-                        (Integer)GUI.comprarSpinnTip.getValue(),(Integer)GUI.venderSpinnTip.getValue());
+                        (Integer)GUI.comprarSpinnTip.getValue(),(Integer)GUI.venderSpinnTip.getValue(), (Double)GUI.minrateSpinnTip.getValue());
             }
         });
 
         GUI.criarPassiveBT.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-             createNewPassive((Double)GUI.saldoSpinnPassive.getValue(),(Integer)GUI.seguirSpinnPassive.getValue());
+             createNewPassive((Double)GUI.saldoSpinnPassive.getValue(),(Integer)GUI.seguirSpinnPassive.getValue(), (Double)GUI.minrateSpinnTip.getValue());
             }
         });
 
         GUI.criarRandomBT.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                createNewRand((Double)GUI.saldoSpinnRand.getValue(),(Integer)GUI.seguirSpinnRand.getValue());
+                createNewRand((Double)GUI.saldoSpinnRand.getValue(),(Integer)GUI.seguirSpinnRand.getValue(), (Double)GUI.minrateSpinnTip.getValue());
             }
         });
     }
